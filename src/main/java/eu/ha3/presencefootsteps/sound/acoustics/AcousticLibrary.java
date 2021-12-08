@@ -19,9 +19,4 @@ public interface AcousticLibrary {
     }
 
     void playAcoustic(Entity location, String acousticName, State event, Options options);
-
-    /**
-     * Run various things, such as queued sounds.
-     */
-    void think();
 }

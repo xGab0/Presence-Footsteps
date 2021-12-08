@@ -12,6 +12,7 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import eu.ha3.presencefootsteps.util.PlayerUtil;
 import eu.ha3.presencefootsteps.sound.Options;
+import eu.ha3.presencefootsteps.sound.SoundEngine;
 import eu.ha3.presencefootsteps.world.Association;
 
 /**
@@ -24,6 +25,12 @@ public class ImmediateSoundPlayer implements SoundPlayer, StepSoundPlayer {
     private final Random random = new Random();
 
     private final DelayedSoundPlayer delayedPlayer = new DelayedSoundPlayer(this);
+
+    private final SoundEngine engine;
+
+    public ImmediateSoundPlayer(SoundEngine engine) {
+        this.engine = engine;
+    }
 
     @Override
     public Random getRNG() {
@@ -61,6 +68,7 @@ public class ImmediateSoundPlayer implements SoundPlayer, StepSoundPlayer {
         MinecraftClient mc = MinecraftClient.getInstance();
         double distance = mc.gameRenderer.getCamera().getPos().squaredDistanceTo(location.getPos());
 
+        volume *= engine.getGlobalVolume();
         volume *= (100 - distance) / 100F;
 
         PositionedSoundInstance sound = createSound(getSoundId(soundName, location), volume, pitch, location);

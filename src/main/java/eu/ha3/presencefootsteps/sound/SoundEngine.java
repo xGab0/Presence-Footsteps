@@ -86,7 +86,7 @@ public class SoundEngine implements IdentifiableResourceReloadListener {
                 }
             });
 
-            isolator.think(); // Delayed sounds
+            isolator.getSoundPlayer().think(); // Delayed sounds
         }
     }
 

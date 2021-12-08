@@ -3,6 +3,7 @@ package eu.ha3.presencefootsteps.sound;
 import eu.ha3.presencefootsteps.config.Variator;
 import eu.ha3.presencefootsteps.sound.acoustics.AcousticLibrary;
 import eu.ha3.presencefootsteps.sound.generator.Locomotion;
+import eu.ha3.presencefootsteps.sound.player.SoundPlayer;
 import eu.ha3.presencefootsteps.sound.player.StepSoundPlayer;
 import eu.ha3.presencefootsteps.world.Index;
 import eu.ha3.presencefootsteps.world.Lookup;
@@ -24,6 +25,8 @@ public interface Isolator {
     Lookup<BlockState> getBlockMap();
 
     Lookup<BlockSoundGroup> getPrimitiveMap();
+
+    SoundPlayer getSoundPlayer();
 
     StepSoundPlayer getStepPlayer();
 
