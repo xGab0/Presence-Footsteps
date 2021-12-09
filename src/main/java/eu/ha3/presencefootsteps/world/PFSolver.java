@@ -288,7 +288,7 @@ public class PFSolver implements Solver {
 
         // we discard the normal block association, and mark the foliage as detected
         if (Emitter.MESSY_GROUND.equals(isolator.getBlockMap().getAssociation(above, Lookup.MESSY_SUBSTRATE))) {
-            return new Association().with(foliage);
+            return new Association(above, pos.up()).with(foliage);
         }
 
         return Association.NOT_EMITTER;
