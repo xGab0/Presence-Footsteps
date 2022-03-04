@@ -71,6 +71,7 @@ public class SoundEngine implements IdentifiableResourceReloadListener {
                     && !(e instanceof FlyingEntity)
                     && !e.hasVehicle()
                     && !((LivingEntity)e).isSleeping()
+                    && (!(e instanceof PlayerEntity) || !((PlayerEntity)e).isSpectator())
                     && e.distanceTo(cameraEntity) <= 16
                     && (config.getEnabledGlobal() || (e instanceof PlayerEntity));
         }).stream();
