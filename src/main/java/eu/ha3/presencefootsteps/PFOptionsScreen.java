@@ -104,7 +104,7 @@ class PFOptionsScreen extends GameGui {
                    .map(latest -> (Text)new TranslatableText("pf.update.updates_available",
                            latest.version().getFriendlyString(),
                            latest.minecraft().getFriendlyString()))
-                   .orElse(new LiteralText("pf.update.up_to_date")));
+                   .orElse(new TranslatableText("pf.update.up_to_date")));
     }
 
     private Text formatVolume(AbstractSlider<Float> slider) {
