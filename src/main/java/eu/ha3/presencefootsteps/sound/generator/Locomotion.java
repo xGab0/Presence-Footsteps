@@ -2,6 +2,7 @@ package eu.ha3.presencefootsteps.sound.generator;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -12,7 +13,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 
 public enum Locomotion {
-    NONE(() -> StepSoundGenerator.EMPTY),
+    NONE,
     BIPED(() -> new TerrestrialStepSoundGenerator(new Modifier<>())),
     QUADRUPED(() -> new TerrestrialStepSoundGenerator(new QuadrupedModifier())),
     FLYING(() -> new WingedStepSoundGenerator(new QuadrupedModifier())),
@@ -27,22 +28,29 @@ public enum Locomotion {
         }
     }
 
-    private final Supplier<StepSoundGenerator> constructor;
+    private final Supplier<Optional<StepSoundGenerator>> constructor;
 
     private static final String AUTO_TRANSLATION_KEY = "menu.pf.stance.auto";
     private final String translationKey = "menu.pf.stance." + name().toLowerCase();
 
-
-    Locomotion(Supplier<StepSoundGenerator> gen) {
-        constructor = gen;
+    Locomotion() {
+        constructor = Optional::empty;
     }
 
-    public StepSoundGenerator supplyGenerator() {
+    Locomotion(Supplier<StepSoundGenerator> gen) {
+        constructor = () -> Optional.of(gen.get());
+    }
+
+    public Optional<StepSoundGenerator> supplyGenerator() {
         return constructor.get();
     }
 
     public Text getOptionName() {
         return new TranslatableText("menu.pf.stance", new TranslatableText(this == NONE ? AUTO_TRANSLATION_KEY : translationKey));
+    }
+
+    public Text getOptionTooltip() {
+        return new TranslatableText(translationKey + ".tooltip");
     }
 
     public String getDisplayName() {

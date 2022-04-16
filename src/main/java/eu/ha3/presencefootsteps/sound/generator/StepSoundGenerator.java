@@ -7,10 +7,12 @@ import net.minecraft.entity.LivingEntity;
  * Has the ability to generate footsteps based on a Player.
  *
  * @author Hurry
- *
  */
 public interface StepSoundGenerator {
-    StepSoundGenerator EMPTY = ply -> false;
+    /**
+     * Gets the motion tracker used to determine the direction and speed for an entity during simulation.
+     */
+    MotionTracker getMotionTracker();
 
     /**
      * Generate footsteps sounds of the Entity.
@@ -20,5 +22,5 @@ public interface StepSoundGenerator {
     /**
      * Sets this engine to use the parameters from a new isolator.
      */
-    default void setIsolator(Isolator isolator) {}
+    void setIsolator(Isolator isolator);
 }

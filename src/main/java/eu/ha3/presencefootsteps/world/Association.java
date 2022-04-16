@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.BlockPos;
 
@@ -19,7 +19,7 @@ public class Association {
 
     private String data = Emitter.NOT_EMITTER;
 
-    private Entity source;
+    private LivingEntity source;
 
     public Association() {
         this(Blocks.AIR.getDefaultState(), BlockPos.ORIGIN);
@@ -30,7 +30,7 @@ public class Association {
         this.pos = pos;
     }
 
-    public Association at(Entity source) {
+    public Association at(LivingEntity source) {
 
         if (!isNull()) {
             this.source = source;
@@ -64,7 +64,7 @@ public class Association {
         return data;
     }
 
-    public Entity getSource() {
+    public LivingEntity getSource() {
         return source;
     }
 

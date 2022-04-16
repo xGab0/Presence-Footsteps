@@ -1,6 +1,6 @@
 package eu.ha3.presencefootsteps.world;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -27,7 +27,7 @@ public interface Solver {
     /**
      * Play an association.
      */
-    void playAssociation(Entity ply, Association assos, State eventType);
+    void playAssociation(LivingEntity ply, Association assos, State eventType);
 
     /**
      * Find an association for a player particular foot. This will fetch the player
@@ -39,7 +39,7 @@ public interface Solver {
      * Returns a string that begins with "_NO_ASSOCIATION" if a matching block was
      * found, but has no association in the blockmap.
      */
-    Association findAssociation(Entity ply, double verticalOffsetAsMinus, boolean isRightFoot);
+    Association findAssociation(LivingEntity ply, double verticalOffsetAsMinus, boolean isRightFoot);
 
     /**
      * Find an association for a certain block assuming the player is standing on

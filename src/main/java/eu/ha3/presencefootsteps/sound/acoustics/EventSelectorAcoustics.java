@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 import eu.ha3.presencefootsteps.sound.Options;
 import eu.ha3.presencefootsteps.sound.State;
 import eu.ha3.presencefootsteps.sound.player.SoundPlayer;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 
 /**
  * An acoustic that can play different acoustics depending on a specific event type.
@@ -29,7 +29,7 @@ class EventSelectorAcoustics implements Acoustic {
     }
 
     @Override
-    public void playSound(SoundPlayer player, Entity location, State event, Options inputOptions) {
+    public void playSound(SoundPlayer player, LivingEntity location, State event, Options inputOptions) {
         if (pairs.containsKey(event)) {
             pairs.get(event).playSound(player, location, event, inputOptions);
         } else if (event.canTransition()) {

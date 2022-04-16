@@ -6,7 +6,7 @@ import eu.ha3.presencefootsteps.sound.Options;
 import eu.ha3.presencefootsteps.sound.State;
 import eu.ha3.presencefootsteps.sound.player.SoundPlayer;
 import eu.ha3.presencefootsteps.util.Range;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 
 
 /**
@@ -39,7 +39,7 @@ class VaryingAcoustic implements Acoustic {
     }
 
     @Override
-    public void playSound(SoundPlayer player, Entity location, State event, Options inputOptions) {
+    public void playSound(SoundPlayer player, LivingEntity location, State event, Options inputOptions) {
         if (soundName.isEmpty()) {
             // Special case for intentionally empty sounds (as opposed to fall back sounds)
             return;

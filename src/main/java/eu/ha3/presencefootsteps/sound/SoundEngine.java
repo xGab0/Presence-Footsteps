@@ -10,7 +10,7 @@ import eu.ha3.presencefootsteps.PFConfig;
 import eu.ha3.presencefootsteps.mixins.IEntity;
 import eu.ha3.presencefootsteps.sound.acoustics.AcousticsJsonParser;
 import eu.ha3.presencefootsteps.sound.generator.Locomotion;
-import eu.ha3.presencefootsteps.sound.generator.StepSoundGenerator;
+import eu.ha3.presencefootsteps.util.PlayerUtil;
 import eu.ha3.presencefootsteps.util.ResourceUtils;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.client.MinecraftClient;
@@ -51,8 +51,28 @@ public class SoundEngine implements IdentifiableResourceReloadListener {
         this.config = config;
     }
 
-    public float getGlobalVolume() {
-        return config.getVolume() / 100F;
+    public float getVolumeForSource(LivingEntity source) {
+        float volume = config.getGlobalVolume() / 100F;
+
+        if (source instanceof PlayerEntity) {
+            if (PlayerUtil.isClientPlayer(source)) {
+                volume *= config.getClientPlayerVolume() / 100F;
+            } else {
+                volume *= config.getOtherPlayerVolume() / 100F;
+            }
+        }
+
+        float runningProgress = ((StepSoundSource) source).getStepGenerator(this)
+                .map(generator -> {
+                    config.getRunningVolumeIncrease();
+                    return generator.getMotionTracker().getSpeedScalingRatio(source);
+                })
+                .orElse(0F);
+
+        // volume gets cut off at 1, so invert the function and lower it, so walking slower makes it quieter
+        // and running causes it to ramp up to 1.
+        float runningDecrease = (config.getRunningVolumeIncrease() / 100F) * (1F - runningProgress);
+        return volume * (1F - runningDecrease);
     }
 
     public Isolator getIsolator() {
@@ -93,11 +113,12 @@ public class SoundEngine implements IdentifiableResourceReloadListener {
         if (!client.isPaused() && isRunning(client)) {
             getTargets(cameraEntity).forEach(e -> {
                 try {
-                    StepSoundGenerator generator = ((StepSoundSource) e).getStepGenerator(this);
-                    generator.setIsolator(isolator);
-                    if (generator.generateFootsteps((LivingEntity)e)) {
-                        ((IEntity) e).setNextStepDistance(Integer.MAX_VALUE);
-                    }
+                    ((StepSoundSource) e).getStepGenerator(this).ifPresent(generator -> {
+                        generator.setIsolator(isolator);
+                        if (generator.generateFootsteps((LivingEntity)e)) {
+                            ((IEntity) e).setNextStepDistance(Integer.MAX_VALUE);
+                        }
+                    });
                 } catch (Throwable t) {
                     CrashReport report = CrashReport.create(t, "Generating PF sounds for entity");
                     CrashReportSection section = report.addElement("Entity being ticked");

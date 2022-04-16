@@ -11,26 +11,18 @@ import eu.ha3.presencefootsteps.config.Variator;
 import eu.ha3.presencefootsteps.mixins.ILivingEntity;
 import eu.ha3.presencefootsteps.sound.State;
 import eu.ha3.presencefootsteps.sound.acoustics.AcousticLibrary;
-import eu.ha3.presencefootsteps.util.PlayerUtil;
 import eu.ha3.presencefootsteps.sound.Isolator;
 import eu.ha3.presencefootsteps.sound.Options;
 import eu.ha3.presencefootsteps.world.Association;
 import eu.ha3.presencefootsteps.world.Solver;
 
 class TerrestrialStepSoundGenerator implements StepSoundGenerator {
-
-    private double lastX;
-    private double lastY;
-    private double lastZ;
-
-    protected double motionX;
-    protected double motionY;
-    protected double motionZ;
-
     // Construct
     protected Solver solver;
     protected AcousticLibrary acoustics;
     protected Variator variator;
+
+    protected final MotionTracker motionTracker = new MotionTracker(this);
 
     // Footsteps
     protected float dmwBase;
@@ -73,8 +65,13 @@ class TerrestrialStepSoundGenerator implements StepSoundGenerator {
     }
 
     @Override
+    public MotionTracker getMotionTracker() {
+        return motionTracker;
+    }
+
+    @Override
     public boolean generateFootsteps(LivingEntity ply) {
-        simulateMotionData(ply);
+        motionTracker.simulateMotionData(ply);
         simulateFootsteps(ply);
         simulateAirborne(ply);
         simulateBrushes(ply);
@@ -103,50 +100,6 @@ class TerrestrialStepSoundGenerator implements StepSoundGenerator {
         return false;
     }
 
-    /**
-     * Fills in the blanks that aren't present on the client when playing on a
-     * remote server.
-     */
-    protected void simulateMotionData(LivingEntity ply) {
-        if (PlayerUtil.isClientPlayer(ply)) {
-            motionX = ply.getVelocity().x;
-            motionY = ply.getVelocity().y;
-            motionZ = ply.getVelocity().z;
-        } else {
-            // Other players don't send their motion data so we have to make our own
-            // approximations.
-            motionX = (ply.getX() - lastX);
-            lastX = ply.getX();
-            motionY = (ply.getY() - lastY);
-
-            if (ply.isOnGround()) {
-                motionY += 0.0784000015258789d;
-            }
-
-            lastY = ply.getY();
-
-            motionZ = (ply.getZ() - lastZ);
-            lastZ = ply.getZ();
-        }
-
-        if (ply instanceof OtherClientPlayerEntity) {
-            if (ply.world.getTime() % 1 == 0) {
-
-                if (motionX != 0 || motionZ != 0) {
-                    ply.distanceTraveled += Math.sqrt(Math.pow(motionX, 2) + Math.pow(motionY, 2) + Math.pow(motionZ, 2)) * 0.8;
-                } else {
-                    ply.distanceTraveled += Math.sqrt(Math.pow(motionX, 2) + Math.pow(motionZ, 2)) * 0.8;
-                }
-
-                if (ply.isOnGround()) {
-                    ply.fallDistance = 0;
-                } else if (motionY < 0) {
-                    ply.fallDistance -= motionY * 200;
-                }
-            }
-        }
-    }
-
     protected boolean updateImmobileState(LivingEntity ply, float reference) {
         float diff = lastReference - reference;
         lastReference = reference;
@@ -171,8 +124,8 @@ class TerrestrialStepSoundGenerator implements StepSoundGenerator {
             dwmYChange = 0;
         }
 
-        double movX = motionX;
-        double movZ = motionZ;
+        double movX = motionTracker.getMotionX();
+        double movZ = motionTracker.getMotionZ();
 
         double scal = movX * xMovec + movZ * zMovec;
         if (scalStat != scal < 0.001f) {
@@ -204,11 +157,11 @@ class TerrestrialStepSoundGenerator implements StepSoundGenerator {
                 // This ensures this does not get recorded as landing, but as a step
                 if (yPosition < ply.getY()) { // Going upstairs
                     distance = variator.DISTANCE_STAIR;
-                    event = speedDisambiguator(ply, State.UP, State.UP_RUN);
+                    event = motionTracker.pickState(ply, State.UP, State.UP_RUN);
                 } else if (!ply.isSneaking()) { // Going downstairs
                     distance = -1f;
                     verticalOffsetAsMinus = 0f;
-                    event = speedDisambiguator(ply, State.DOWN, State.DOWN_RUN);
+                    event = motionTracker.pickState(ply, State.DOWN, State.DOWN_RUN);
                 }
 
                 dwmYChange = distanceReference;
@@ -218,7 +171,7 @@ class TerrestrialStepSoundGenerator implements StepSoundGenerator {
             }
 
             if (event == null) {
-                event = speedDisambiguator(ply, State.WALK, State.RUN);
+                event = motionTracker.pickState(ply, State.WALK, State.RUN);
             }
             distance = modifier.reevaluateDistance(event, distance);
 
@@ -243,7 +196,7 @@ class TerrestrialStepSoundGenerator implements StepSoundGenerator {
     public final void produceStep(LivingEntity ply, @Nullable State event, double verticalOffsetAsMinus) {
 
         if (event == null) {
-            event = speedDisambiguator(ply, State.WALK, State.RUN);
+            event = motionTracker.pickState(ply, State.WALK, State.RUN);
         }
 
         if (hasStoppingConditions(ply)) {
@@ -301,8 +254,7 @@ class TerrestrialStepSoundGenerator implements StepSoundGenerator {
 
     protected void simulateJumping(LivingEntity ply) {
         if (variator.EVENT_ON_JUMP) {
-            double speed = motionX * motionX + motionZ * motionZ;
-            if (speed < variator.SPEED_TO_JUMP_AS_MULTIFOOT) {
+            if (motionTracker.getHorizontalSpeed() < variator.SPEED_TO_JUMP_AS_MULTIFOOT) {
                 // STILL JUMP
                 playMultifoot(ply, getOffsetMinus(ply) + 0.4d, State.JUMP);
                 // 2 - 0.7531999805212d (magic number for vertical offset?)
@@ -322,22 +274,10 @@ class TerrestrialStepSoundGenerator implements StepSoundGenerator {
             // Do not toggle foot:
             // After landing sounds, the first foot will be same as the one used to jump.
         } else if (/* !this.stepThisFrame && */!ply.isSneaking()) {
-            playSinglefoot(ply, getOffsetMinus(ply), speedDisambiguator(ply, State.CLIMB, State.CLIMB_RUN), isRightFoot);
+            playSinglefoot(ply, getOffsetMinus(ply), motionTracker.pickState(ply, State.CLIMB, State.CLIMB_RUN), isRightFoot);
             if (!this.stepThisFrame)
                 isRightFoot = !isRightFoot;
         }
-    }
-
-    protected State speedDisambiguator(LivingEntity ply, State walk, State run) {
-        if (!PlayerUtil.isClientPlayer(ply)) { // Other players don't send motion data, so have to decide some other way
-            if (ply.isSprinting()) {
-                return run;
-            }
-            return walk;
-        }
-
-        double velocity = motionX * motionX + motionZ * motionZ;
-        return velocity > variator.SPEED_TO_RUN ? run : walk;
     }
 
     private void simulateBrushes(LivingEntity ply) {
@@ -347,7 +287,7 @@ class TerrestrialStepSoundGenerator implements StepSoundGenerator {
 
         brushesTime = System.currentTimeMillis() + 100;
 
-        if ((motionX == 0 && motionZ == 0) || ply.isSneaking()) {
+        if (motionTracker.isStationary() || ply.isSneaking()) {
             return;
         }
 

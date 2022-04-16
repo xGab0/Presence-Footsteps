@@ -7,7 +7,7 @@ import java.util.Random;
 import eu.ha3.presencefootsteps.PresenceFootsteps;
 import eu.ha3.presencefootsteps.sound.Options;
 import eu.ha3.presencefootsteps.util.MathUtil;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 
 class DelayedSoundPlayer implements SoundPlayer {
 
@@ -35,7 +35,7 @@ class DelayedSoundPlayer implements SoundPlayer {
     }
 
     @Override
-    public void playSound(Entity location, String soundName, float volume, float pitch, Options options) {
+    public void playSound(LivingEntity location, String soundName, float volume, float pitch, Options options) {
         pending.add(new PendingSound(location, soundName, volume, pitch, options));
     }
 
@@ -53,7 +53,7 @@ class DelayedSoundPlayer implements SoundPlayer {
     }
 
     private class PendingSound {
-        private final Entity location;
+        private final LivingEntity location;
 
         private final String soundName;
 
@@ -63,7 +63,7 @@ class DelayedSoundPlayer implements SoundPlayer {
         private final long timeToPlay;
         private final long maximum;
 
-        public PendingSound(Entity location, String soundName, float volume, float pitch, Options options) {
+        public PendingSound(LivingEntity location, String soundName, float volume, float pitch, Options options) {
             this.location = location;
             this.soundName = soundName;
             this.volume = volume;

@@ -10,6 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
 import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.tag.FluidTags;
@@ -37,7 +38,7 @@ public class PFSolver implements Solver {
     }
 
     @Override
-    public void playAssociation(Entity ply, Association assos, State eventType) {
+    public void playAssociation(LivingEntity ply, Association assos, State eventType) {
         if (assos.isNotEmitter()) {
             return;
         }
@@ -52,7 +53,7 @@ public class PFSolver implements Solver {
     }
 
     @Override
-    public Association findAssociation(Entity ply, double verticalOffsetAsMinus, boolean isRightFoot) {
+    public Association findAssociation(LivingEntity ply, double verticalOffsetAsMinus, boolean isRightFoot) {
 
         double rot = Math.toRadians(MathHelper.wrapDegrees(ply.getYaw()));
 
@@ -147,7 +148,7 @@ public class PFSolver implements Solver {
             return findAssociation(player.world, pos.north(zdang > 0 ? 1 : -1), collider);
         }
 
-        return findAssociation(player.world, pos.east(xdang > 0 ? 1 : -1), collider);
+        return findAssociation(player.world, pos.west(xdang > 0 ? 1 : -1), collider);
     }
 
     private String findForGolem(World world, BlockPos pos, String substrate) {

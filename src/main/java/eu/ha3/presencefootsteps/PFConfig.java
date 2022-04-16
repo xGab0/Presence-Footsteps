@@ -11,6 +11,10 @@ public class PFConfig extends JsonFile {
 
     private int volume = 70;
 
+    private int clientPlayerVolume = 100;
+    private int otherPlayerVolume = 100;
+    private int runningVolumeIncrease = 0;
+
     private String stance = "UNKNOWN";
 
     private boolean multiplayer = true;
@@ -21,7 +25,6 @@ public class PFConfig extends JsonFile {
 
     public PFConfig(Path file, PresenceFootsteps pf) {
         super(file);
-
         this.pf = pf;
     }
 
@@ -64,15 +67,27 @@ public class PFConfig extends JsonFile {
     }
 
     public boolean getEnabled() {
-        return getVolume() > 0;
+        return getGlobalVolume() > 0;
     }
 
-    public int getVolume() {
+    public int getGlobalVolume() {
         return MathHelper.clamp(volume, 0, 100);
     }
 
-    public float setVolume(float volume) {
-        volume = volume > 97 ? 100 : volume < 3 ? 0 : (int)volume;
+    public int getClientPlayerVolume() {
+        return MathHelper.clamp(clientPlayerVolume, 0, 100);
+    }
+
+    public int getOtherPlayerVolume() {
+        return MathHelper.clamp(otherPlayerVolume, 0, 100);
+    }
+
+    public int getRunningVolumeIncrease() {
+        return MathHelper.clamp(runningVolumeIncrease, 0, 100);
+    }
+
+    public float setGlobalVolume(float volume) {
+        volume = volumeScaleToInt(volume);
 
         if (this.volume != volume) {
             boolean wasEnabled = getEnabled();
@@ -85,7 +100,21 @@ public class PFConfig extends JsonFile {
             }
         }
 
-        return getVolume();
+        return getGlobalVolume();
+    }
+
+    public float setClientPlayerVolume(float volume) {
+        clientPlayerVolume = volumeScaleToInt(volume);
+        return getClientPlayerVolume();
+    }
+
+    public float setOtherPlayerVolume(float volume) {
+        otherPlayerVolume = volumeScaleToInt(volume);
+        return getOtherPlayerVolume();
+    }
+    public float setRunningVolumeIncrease(float volume) {
+        runningVolumeIncrease = volumeScaleToInt(volume);
+        return getRunningVolumeIncrease();
     }
 
     public void populateCrashReport(CrashReportSection section) {
@@ -93,5 +122,9 @@ public class PFConfig extends JsonFile {
         section.add("PF User's Selected Stance", stance + " (" + getLocomotion() + ")");
         section.add("Enabled Global", global);
         section.add("Enabled Multiplayer", multiplayer);
+    }
+
+    private static int volumeScaleToInt(float volume) {
+        return volume > 97 ? 100 : volume < 3 ? 0 : (int)volume;
     }
 }

@@ -10,7 +10,7 @@ import com.google.gson.JsonObject;
 import eu.ha3.presencefootsteps.sound.Options;
 import eu.ha3.presencefootsteps.sound.State;
 import eu.ha3.presencefootsteps.sound.player.SoundPlayer;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 
 /**
  * An acoustic that plays multiple other acoustics all a the same time.
@@ -32,7 +32,7 @@ class SimultaneousAcoustic implements Acoustic {
     }
 
     @Override
-    public void playSound(SoundPlayer player, Entity location, State event, Options inputOptions) {
+    public void playSound(SoundPlayer player, LivingEntity location, State event, Options inputOptions) {
         acoustics.forEach(acoustic -> acoustic.playSound(player, location, event, inputOptions));
     }
 }

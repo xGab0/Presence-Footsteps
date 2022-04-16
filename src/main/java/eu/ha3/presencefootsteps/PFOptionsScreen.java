@@ -1,10 +1,13 @@
 package eu.ha3.presencefootsteps;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.minelittlepony.common.client.gui.GameGui;
+import com.minelittlepony.common.client.gui.Tooltip;
+import com.minelittlepony.common.client.gui.dimension.Bounds;
 import com.minelittlepony.common.client.gui.element.AbstractSlider;
 import com.minelittlepony.common.client.gui.element.Button;
 import com.minelittlepony.common.client.gui.element.EnumSlider;
@@ -28,7 +31,11 @@ class PFOptionsScreen extends GameGui {
     @Override
     public void init() {
         int left = width / 2 - 100;
-        int row = height / 4 + 14;
+
+        int wideLeft = width / 2 - 155;
+        int wideRight = wideLeft + 160;
+
+        int row = height / 4;
 
         PFConfig config = PresenceFootsteps.getInstance().getConfig();
 
@@ -43,25 +50,47 @@ class PFOptionsScreen extends GameGui {
             });
         }));
 
-        addButton(new Slider(left, row, 0, 100, config.getVolume()))
-            .onChange(config::setVolume)
+        var slider = addButton(new Slider(wideLeft, row, 0, 100, config.getGlobalVolume()))
+            .onChange(config::setGlobalVolume)
             .setTextFormat(this::formatVolume);
+        slider.setBounds(new Bounds(row, wideLeft, 310, 20));
+        slider.getStyle().setTooltip(Tooltip.of("menu.pf.volume.tooltip", 210)).setTooltipOffset(0, 25);
+
+        slider = addButton(new Slider(wideLeft, row += 24, 0, 100, config.getClientPlayerVolume()))
+            .onChange(config::setClientPlayerVolume)
+            .setTextFormat(formatVolume("menu.pf.volume.player"));
+        slider.setBounds(new Bounds(row, wideLeft, 150, 20));
+        slider.getStyle().setTooltip(Tooltip.of("menu.pf.volume.player.tooltip", 210)).setTooltipOffset(0, 25);
+
+        slider = addButton(new Slider(wideRight, row, 0, 100, config.getOtherPlayerVolume()))
+            .onChange(config::setOtherPlayerVolume)
+            .setTextFormat(formatVolume("menu.pf.volume.other_players"));
+        slider.setBounds(new Bounds(row, wideRight, 150, 20));
+        slider.getStyle().setTooltip(Tooltip.of("menu.pf.volume.other_players.tooltip", 210)).setTooltipOffset(0, 25);
+
+        slider = addButton(new Slider(wideLeft, row += 24, 0, 100, config.getRunningVolumeIncrease()))
+            .onChange(config::setRunningVolumeIncrease)
+            .setTextFormat(formatVolume("menu.pf.volume.running"));
+        slider.setBounds(new Bounds(row, wideLeft, 310, 20));
+        slider.getStyle().setTooltip(Tooltip.of("menu.pf.volume.running.tooltip", 210)).setTooltipOffset(0, 25);
 
         addButton(new EnumSlider<>(left, row += 24, config.getLocomotion())
                 .onChange(config::setLocomotion)
-                .setTextFormat(v -> v.getValue().getOptionName()));
+                .setTextFormat(v -> v.getValue().getOptionName()))
+                .setTooltipFormat(v -> Tooltip.of(v.getValue().getOptionTooltip()))
+                .setBounds(new Bounds(row, wideLeft, 310, 20));
 
-        addButton(new Button(left, row += 24).onClick(sender -> {
-            sender.getStyle().setText("menu.pf.multiplayer." + config.toggleMultiplayer());
-        })).getStyle()
-            .setText("menu.pf.multiplayer." + config.getEnabledMP());
-
-        addButton(new Button(left, row += 24).onClick(sender -> {
+        addButton(new Button(wideLeft, row += 24, 150, 20).onClick(sender -> {
             sender.getStyle().setText("menu.pf.global." + config.toggleGlobal());
         })).getStyle()
             .setText("menu.pf.global." + config.getEnabledGlobal());
 
-        addButton(new Button(left, row += 24, 96, 20).onClick(sender -> {
+        addButton(new Button(wideRight, row, 150, 20).onClick(sender -> {
+            sender.getStyle().setText("menu.pf.multiplayer." + config.toggleMultiplayer());
+        })).getStyle()
+            .setText("menu.pf.multiplayer." + config.getEnabledMP());
+
+        addButton(new Button(wideLeft, row += 24, 150, 20).onClick(sender -> {
             sender.setEnabled(false);
             new BlockReport("report_concise")
                 .execute(state -> !PresenceFootsteps.getInstance().getEngine().getIsolator().getBlockMap().contains(state))
@@ -70,7 +99,7 @@ class PFOptionsScreen extends GameGui {
             .getStyle()
             .setText("menu.pf.report.concise");
 
-        addButton(new Button(left + 104, row, 96, 20)
+        addButton(new Button(wideRight, row, 150, 20)
             .onClick(sender -> {
                 sender.setEnabled(false);
                 new BlockReport("report_full")
@@ -113,5 +142,9 @@ class PFOptionsScreen extends GameGui {
         }
 
         return new TranslatableText("menu.pf.volume", (int)Math.floor(slider.getValue()));
+    }
+
+    static Function<AbstractSlider<Float>, Text> formatVolume(String key) {
+        return slider -> new TranslatableText(key, (int)Math.floor(slider.getValue()));
     }
 }

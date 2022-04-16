@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import eu.ha3.presencefootsteps.util.PlayerUtil;
@@ -53,7 +54,7 @@ public class ImmediateSoundPlayer implements SoundPlayer, StepSoundPlayer {
     }
 
     @Override
-    public void playSound(Entity location, String soundName, float volume, float pitch, Options options) {
+    public void playSound(LivingEntity location, String soundName, float volume, float pitch, Options options) {
 
         if (options.containsKey("delay_min") && options.containsKey("delay_max")) {
             delayedPlayer.playSound(location, soundName, volume, pitch, options);
@@ -64,14 +65,13 @@ public class ImmediateSoundPlayer implements SoundPlayer, StepSoundPlayer {
         playAttenuatedSound(location, soundName, volume, pitch);
     }
 
-    private void playAttenuatedSound(Entity location, String soundName, float volume, float pitch) {
+    private void playAttenuatedSound(LivingEntity location, String soundName, float volume, float pitch) {
         MinecraftClient mc = MinecraftClient.getInstance();
         double distance = mc.gameRenderer.getCamera().getPos().squaredDistanceTo(location.getPos());
 
-        volume *= engine.getGlobalVolume();
-        volume *= (100 - distance) / 100F;
+        volume *= engine.getVolumeForSource(location);
 
-        PositionedSoundInstance sound = createSound(getSoundId(soundName, location), volume, pitch, location);
+        PositionedSoundInstance sound = new UncappedSoundInstance(soundName, volume, pitch, location);
 
         if (distance > 100) {
             mc.getSoundManager().play(sound, (int) Math.floor(Math.sqrt(distance) / 2));
@@ -85,28 +85,34 @@ public class ImmediateSoundPlayer implements SoundPlayer, StepSoundPlayer {
         delayedPlayer.think();
     }
 
-    private PositionedSoundInstance createSound(Identifier id, float volume, float pitch, Entity entity) {
-        return new PositionedSoundInstance(id,
-                entity.getSoundCategory(),
-                volume, pitch, false, 0,
-                SoundInstance.AttenuationType.LINEAR,
-                (float) entity.getX(),
-                (float) entity.getY(),
-                (float) entity.getZ(),
-                false);
-    }
-
-    private Identifier getSoundId(String name, Entity location) {
-        if (name.indexOf(':') >= 0) {
-            return new Identifier(name);
+    public static class UncappedSoundInstance extends PositionedSoundInstance {
+        public UncappedSoundInstance(String soundName, float volume, float pitch, Entity entity) {
+            super(getSoundId(soundName, entity),
+                    entity.getSoundCategory(),
+                    volume, pitch, false, 0,
+                    SoundInstance.AttenuationType.NONE,
+                    entity.getX(),
+                    entity.getY(),
+                    entity.getZ(),
+                    false);
         }
 
-        String domain = "presencefootsteps";
-
-        if (!PlayerUtil.isClientPlayer(location)) {
-            domain += "mono"; // Switch to mono if playing another player
+        public float getMaxVolume() {
+            return 3;
         }
 
-        return new Identifier(domain, name);
+        private static Identifier getSoundId(String name, Entity location) {
+            if (name.indexOf(':') >= 0) {
+                return new Identifier(name);
+            }
+
+            String domain = "presencefootsteps";
+
+            if (!PlayerUtil.isClientPlayer(location)) {
+                domain += "mono"; // Switch to mono if playing another player
+            }
+
+            return new Identifier(domain, name);
+        }
     }
 }

@@ -1,15 +1,17 @@
 package eu.ha3.presencefootsteps.sound;
 
+import java.util.Optional;
+
 import eu.ha3.presencefootsteps.sound.generator.Locomotion;
 import eu.ha3.presencefootsteps.sound.generator.StepSoundGenerator;
 import net.minecraft.entity.LivingEntity;
 
 public interface StepSoundSource {
-    StepSoundGenerator getStepGenerator(SoundEngine engine);
+    Optional<StepSoundGenerator> getStepGenerator(SoundEngine engine);
 
     final class Container implements StepSoundSource {
         private Locomotion locomotion;
-        private StepSoundGenerator stepSoundGenerator;
+        private Optional<StepSoundGenerator> stepSoundGenerator;
 
         private final LivingEntity entity;
 
@@ -18,7 +20,7 @@ public interface StepSoundSource {
         }
 
         @Override
-        public StepSoundGenerator getStepGenerator(SoundEngine engine) {
+        public Optional<StepSoundGenerator> getStepGenerator(SoundEngine engine) {
             Locomotion loco = engine.getLocomotion(entity);
 
             if (stepSoundGenerator == null || loco != locomotion) {

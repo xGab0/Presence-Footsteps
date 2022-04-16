@@ -40,6 +40,16 @@ public class Variator extends JsonFile {
     public float SPEED_TO_RUN = 0.022F;
 
     /**
+     * The speed at which the footsteps volume will begin increasing as the player transitions to running.
+     */
+    public float RUNNING_RAMPUP_BEGIN = 0.001F;
+
+    /**
+     * The speed at which the footsteps volume will stop increasing after the player as transitioned to running.
+     */
+    public float RUNNING_RAMPUP_END = 0.022F;
+
+    /**
      * Normal step distance for humans
      */
     public float DISTANCE_HUMAN = 0.95F;

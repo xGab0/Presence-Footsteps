@@ -9,6 +9,7 @@
       "ILivingEntity",
       "MClientPlayNetworkHandler",
       "MDebugHud",
-      "MLivingEntity"
+      "MLivingEntity",
+      "MSoundSystem"
     ]
 }
