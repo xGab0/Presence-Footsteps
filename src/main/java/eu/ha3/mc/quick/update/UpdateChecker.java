@@ -54,6 +54,8 @@ public class UpdateChecker {
             o.ifPresent(versions -> {
                 TargettedVersion latest = versions.latest();
 
+                LOGGER.info("Server responded version: " + latest + ", we are " + currentVersion);
+
                 if (latest.version().compareTo(currentVersion.version()) > 0) {
                     if (config.shouldReport(latest)) {
                         reporter.report(latest, currentVersion);
