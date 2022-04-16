@@ -16,14 +16,21 @@ import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.mob.FlyingEntity;
+import net.minecraft.entity.mob.ShulkerEntity;
 import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.crash.CrashException;
+import net.minecraft.util.crash.CrashReport;
+import net.minecraft.util.crash.CrashReportSection;
 import net.minecraft.util.profiler.Profiler;
 
 public class SoundEngine implements IdentifiableResourceReloadListener {
@@ -69,6 +76,11 @@ public class SoundEngine implements IdentifiableResourceReloadListener {
             return e instanceof LivingEntity
                     && !(e instanceof WaterCreatureEntity)
                     && !(e instanceof FlyingEntity)
+                    && !(e instanceof ShulkerEntity
+                            || e instanceof ArmorStandEntity
+                            || e instanceof BoatEntity
+                            || e instanceof AbstractMinecartEntity)
+                    && !isolator.getGolemMap().contains(e.getType())
                     && !e.hasVehicle()
                     && !((LivingEntity)e).isSleeping()
                     && (!(e instanceof PlayerEntity) || !((PlayerEntity)e).isSpectator())
@@ -80,10 +92,24 @@ public class SoundEngine implements IdentifiableResourceReloadListener {
     public void onFrame(MinecraftClient client, Entity cameraEntity) {
         if (!client.isPaused() && isRunning(client)) {
             getTargets(cameraEntity).forEach(e -> {
-                StepSoundGenerator generator = ((StepSoundSource) e).getStepGenerator(this);
-                generator.setIsolator(isolator);
-                if (generator.generateFootsteps((LivingEntity)e)) {
-                    ((IEntity) e).setNextStepDistance(Integer.MAX_VALUE);
+                try {
+                    StepSoundGenerator generator = ((StepSoundSource) e).getStepGenerator(this);
+                    generator.setIsolator(isolator);
+                    if (generator.generateFootsteps((LivingEntity)e)) {
+                        ((IEntity) e).setNextStepDistance(Integer.MAX_VALUE);
+                    }
+                } catch (Throwable t) {
+                    CrashReport report = CrashReport.create(t, "Generating PF sounds for entity");
+                    CrashReportSection section = report.addElement("Entity being ticked");
+                    if (e == null) {
+                        section.add("Entity Type", "null");
+                    } else {
+                        e.populateCrashReport(section);
+                        section.add("Entity's Locomotion Type", isolator.getLocomotionMap().lookup(e));
+                        section.add("Entity is Golem", isolator.getGolemMap().contains(e.getType()));
+                    }
+                    config.populateCrashReport(report.addElement("PF Configuration"));
+                    throw new CrashException(report);
                 }
             });
 

@@ -4,6 +4,7 @@ import java.nio.file.Path;
 
 import eu.ha3.presencefootsteps.config.JsonFile;
 import eu.ha3.presencefootsteps.sound.generator.Locomotion;
+import net.minecraft.util.crash.CrashReportSection;
 import net.minecraft.util.math.MathHelper;
 
 public class PFConfig extends JsonFile {
@@ -85,5 +86,12 @@ public class PFConfig extends JsonFile {
         }
 
         return getVolume();
+    }
+
+    public void populateCrashReport(CrashReportSection section) {
+        section.add("PF Global Volume", volume);
+        section.add("PF User's Selected Stance", stance + " (" + getLocomotion() + ")");
+        section.add("Enabled Global", global);
+        section.add("Enabled Multiplayer", multiplayer);
     }
 }
