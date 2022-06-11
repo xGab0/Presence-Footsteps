@@ -89,7 +89,7 @@ public class ImmediateSoundPlayer implements SoundPlayer, StepSoundPlayer {
         public UncappedSoundInstance(String soundName, float volume, float pitch, Entity entity) {
             super(getSoundId(soundName, entity),
                     entity.getSoundCategory(),
-                    volume, pitch, false, 0,
+                    volume, pitch, SoundInstance.createRandom(), false, 0,
                     SoundInstance.AttenuationType.NONE,
                     entity.getX(),
                     entity.getY(),

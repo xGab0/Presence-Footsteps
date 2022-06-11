@@ -37,9 +37,7 @@ import net.minecraft.block.TransparentBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.ClickEvent;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -57,7 +55,7 @@ public class BlockReport {
                 writeReport(filter);
                 printResults();
             } catch (Exception e) {
-                addMessage(new TranslatableText("pf.report.error", e.getMessage()).styled(s -> s.withColor(Formatting.RED)));
+                addMessage(Text.translatable("pf.report.error", e.getMessage()).styled(s -> s.withColor(Formatting.RED)));
             }
         });
     }
@@ -148,8 +146,8 @@ public class BlockReport {
     }
 
     private void printResults() {
-        addMessage(new TranslatableText("pf.report.save")
-                .append(new LiteralText(loc.getFileName().toString()).styled(s -> s
+        addMessage(Text.translatable("pf.report.save")
+                .append(Text.literal(loc.getFileName().toString()).styled(s -> s
                     .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, loc.toString()))
                     .withFormatting(Formatting.UNDERLINE)))
                 .styled(s -> s

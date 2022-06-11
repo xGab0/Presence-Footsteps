@@ -10,7 +10,6 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 public enum Locomotion {
     NONE,
@@ -46,11 +45,11 @@ public enum Locomotion {
     }
 
     public Text getOptionName() {
-        return new TranslatableText("menu.pf.stance", new TranslatableText(this == NONE ? AUTO_TRANSLATION_KEY : translationKey));
+        return Text.translatable("menu.pf.stance", Text.translatable(this == NONE ? AUTO_TRANSLATION_KEY : translationKey));
     }
 
     public Text getOptionTooltip() {
-        return new TranslatableText(translationKey + ".tooltip");
+        return Text.translatable(translationKey + ".tooltip");
     }
 
     public String getDisplayName() {

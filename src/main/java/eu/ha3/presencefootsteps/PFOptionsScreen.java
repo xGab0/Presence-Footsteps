@@ -18,14 +18,15 @@ import eu.ha3.mc.quick.update.Versions;
 import eu.ha3.presencefootsteps.util.BlockReport;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 class PFOptionsScreen extends GameGui {
+    public static final Text TITLE = Text.translatable("menu.pf.title");
+    public static final Text UP_TO_DATE = Text.translatable("pf.update.up_to_date");
+    public static final Text VOLUME_MIN = Text.translatable("menu.pf.volume.min");
 
     public PFOptionsScreen(@Nullable Screen parent) {
-        super(new TranslatableText("menu.pf.title"), parent);
+        super(TITLE, parent);
     }
 
     @Override
@@ -130,21 +131,21 @@ class PFOptionsScreen extends GameGui {
            .setColor(hasUpdate ? 0xAAFF00 : 0xFFFFFF)
            .setTooltip(versions
                    .map(Versions::latest)
-                   .map(latest -> (Text)new TranslatableText("pf.update.updates_available",
+                   .map(latest -> (Text)Text.translatable("pf.update.updates_available",
                            latest.version().getFriendlyString(),
                            latest.minecraft().getFriendlyString()))
-                   .orElse(new TranslatableText("pf.update.up_to_date")));
+                   .orElse(UP_TO_DATE));
     }
 
     private Text formatVolume(AbstractSlider<Float> slider) {
         if (slider.getValue() <= 0) {
-            return new TranslatableText("menu.pf.volume.min");
+            return VOLUME_MIN;
         }
 
-        return new TranslatableText("menu.pf.volume", (int)Math.floor(slider.getValue()));
+        return Text.translatable("menu.pf.volume", (int)Math.floor(slider.getValue()));
     }
 
     static Function<AbstractSlider<Float>, Text> formatVolume(String key) {
-        return slider -> new TranslatableText(key, (int)Math.floor(slider.getValue()));
+        return slider -> Text.translatable(key, (int)Math.floor(slider.getValue()));
     }
 }

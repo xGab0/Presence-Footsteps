@@ -23,7 +23,7 @@ import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.toast.ToastManager;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 
 public class PresenceFootsteps implements ClientModInitializer {
     public static final Logger logger = LogManager.getLogger("PFSolver");
@@ -102,7 +102,7 @@ public class PresenceFootsteps implements ClientModInitializer {
         ToastManager manager = MinecraftClient.getInstance().getToastManager();
 
         SystemToast.add(manager, SystemToast.Type.TUTORIAL_HINT,
-                new TranslatableText("pf.update.title"),
-                new TranslatableText("pf.update.text", newVersion.version().getFriendlyString(), newVersion.minecraft().getFriendlyString()));
+                Text.translatable("pf.update.title"),
+                Text.translatable("pf.update.text", newVersion.version().getFriendlyString(), newVersion.minecraft().getFriendlyString()));
     }
 }
