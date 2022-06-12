@@ -72,5 +72,9 @@
 	"minecraft:axolotl": "QUADRUPED",
 	"minecraft:goat": "QUADRUPED",
 	"minecraft:glow_squid": "NONE",
-	"minecraft:armor_stand": "NONE"
+	"minecraft:armor_stand": "NONE",
+	"minecraft:allay": "NONE",
+	"minecraft:frog": "BIPED",
+	"minecraft:tadpole": "NONE",
+	"minecraft:warden": "BIPED"
 }

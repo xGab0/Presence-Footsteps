@@ -33,6 +33,7 @@
 
 	"minecraft:deepslate[axis=y]": "slate",
 	"minecraft:deepslate": "rough_slate",
+	"minecraft:reinforced_deepslate": "rough_slate",
 	"minecraft:infested_deepslate": "slate",
 
 	"minecraft:cobbled_deepslate": "rough_slate",
@@ -88,6 +89,7 @@
 	"minecraft:jungle_log": "wood",
 	"minecraft:acacia_log": "wood",
 	"minecraft:dark_oak_log": "woodutility",
+	"minecraft:mangrove_log": "wood",
 
 	"minecraft:stripped_oak_log": "wood,stone",
 	"minecraft:stripped_spruce_log": "wood,stone",
@@ -95,6 +97,7 @@
 	"minecraft:stripped_jungle_log": "wood,stone",
 	"minecraft:stripped_acacia_log": "wood,stone",
 	"minecraft:stripped_dark_oak_log": "woodutility,stone",
+	"minecraft:stripped_mangrove_log": "wood,stone",
 
 	"minecraft:stripped_oak_wood": "wood,stone",
 	"minecraft:stripped_spruce_wood": "wood,stone",
@@ -102,6 +105,7 @@
 	"minecraft:stripped_jungle_wood": "wood,stone",
 	"minecraft:stripped_acacia_wood": "wood,stone",
 	"minecraft:stripped_dark_oak_wood": "woodutility,stone",
+	"minecraft:stripped_mangrove_wood": "wood,stone",
 
 	"minecraft:oak_wood": "wood",
 	"minecraft:spruce_wood": "wood",
@@ -109,6 +113,7 @@
 	"minecraft:jungle_wood": "wood",
 	"minecraft:acacia_wood": "wood",
 	"minecraft:dark_oak_wood": "wood",
+	"minecraft:mangrove_wood": "wood",
 
 	"#minecraft:leaves": "leaves",
 
@@ -199,6 +204,7 @@
 	"minecraft:jungle_slab": "wood",
 	"minecraft:acacia_slab": "wood",
 	"minecraft:dark_oak_slab": "wood",
+	"minecraft:mangrove_slab": "wood",
 
 	"minecraft:stone_slab": "stone",
 	"minecraft:smooth_stone_slab": "marble",
@@ -320,6 +326,10 @@
 	"minecraft:pointed_dripstone": "ore",
 	"minecraft:pointed_dripstone.foliage": "ore",
 
+	"minecraft:sculk": "organic_solid",
+	"minecraft:sculk_catalyst": "organic_solid",
+	"minecraft:sculk_shrieker": "organic_solid",
+	"minecraft:sculk_vein.carpet": "organic_solid",
 	"minecraft:sculk_sensor": "sand,mud",
 	"minecraft:sculk_sensor.foliage": "brush",
 
@@ -370,6 +380,9 @@
 	"minecraft:brown_mushroom_block": "mushroom",
 	"minecraft:red_mushroom_block": "mushroom",
 	"minecraft:mushroom_stem": "mushroom",
+	"minecraft:ochre_froglight": "mushroom",
+	"minecraft:pearlescent_froglight": "mushroom",
+	"minecraft:verdant_froglight": "mushroom",
 
 	"minecraft:iron_bars": "metalbar",
 	"minecraft:glass_pane": "glass",
@@ -403,6 +416,16 @@
 	
 	"minecraft:azalea": "leaves",
 	"minecraft:flowering_azalea": "leaves",
+	"minecraft:mangrove_roots": "rug,leaves",
+	"minecraft:muddy_mangrove_roots": "mud,slick",
+	
+	"minecraft:mud": "mud",
+	"minecraft:packed_mud": "dirt",
+	"minecraft:mud_bricks": "brickstone",
+	"minecraft:mud_brick_stairs": "brickstone",
+	"minecraft:mud_brick_slab": "brickstone",
+	"minecraft:mud_brick_wall.bigger": "brickstone",
+	"minecraft:mud_brick_wall": "NOT_EMITTED",
 
 	"minecraft:spore_blossom": "NOT_EMITTER",
 	"minecraft:hanging_roots": "NOT_EMITTER",
@@ -413,12 +436,14 @@
 	"minecraft:jungle_fence_gate.bigger": "bluntwood",
 	"minecraft:acacia_fence_gate.bigger": "bluntwood",
 	"minecraft:dark_oak_fence_gate.bigger": "bluntwood",
+	"minecraft:mangrove_fence_gate.bigger": "bluntwood",
 
 	"minecraft:brick_stairs": "brickstone",
 	"minecraft:stone_brick_stairs": "brickstone",
 	"minecraft:mycelium": "grass",
 	"minecraft:lily_pad": "waterfine",
 	"minecraft:lily_pad.carpet": "waterfine",
+	"minecraft:frogspawn": "NON_EMITTER",
 
 	"minecraft:nether_bricks": "brickstone",
 	"minecraft:cracked_nether_bricks": "brickstone",
@@ -471,6 +496,8 @@
 	"minecraft:acacia_button": "NOT_EMITTER",
 	"minecraft:dark_oak_button[face=floor].foliage": "wood",
 	"minecraft:dark_oak_button": "NOT_EMITTER",
+	"minecraft:mangrove_button[face=floor].foliage": "wood",
+	"minecraft:mangrove_button": "NOT_EMITTER",
 
 	"#minecraft:anvil": "metalcompressed,hardmetal",
 
