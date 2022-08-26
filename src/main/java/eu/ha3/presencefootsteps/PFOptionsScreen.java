@@ -78,7 +78,7 @@ class PFOptionsScreen extends GameGui {
         addButton(new EnumSlider<>(left, row += 24, config.getLocomotion())
                 .onChange(config::setLocomotion)
                 .setTextFormat(v -> v.getValue().getOptionName()))
-                .setTooltipFormat(v -> Tooltip.of(v.getValue().getOptionTooltip()))
+                .setTooltipFormat(v -> Tooltip.of(v.getValue().getOptionTooltip(), 250))
                 .setBounds(new Bounds(row, wideLeft, 310, 20));
 
         addButton(new Button(wideLeft, row += 24, 150, 20).onClick(sender -> {
