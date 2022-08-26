@@ -537,8 +537,8 @@
 	"minecraft:iron_trapdoor": "metalsubparts",
 	"minecraft:hay_block": "leaves",
 
-	"#minecraft:carpets": "rug",
-	"#minecraft:carpets.carpet": "rug",
+	"#minecraft:wool_carpets": "rug",
+	"#minecraft:wool_carpets.carpet": "rug",
 
 	"minecraft:terracotta": "brickstone",
 	"minecraft:coal_block": "stone",
