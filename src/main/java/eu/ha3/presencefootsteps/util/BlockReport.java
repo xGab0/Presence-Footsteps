@@ -3,6 +3,7 @@ package eu.ha3.presencefootsteps.util;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
@@ -36,6 +37,7 @@ import net.minecraft.block.TorchBlock;
 import net.minecraft.block.TransparentBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -68,17 +70,25 @@ public class BlockReport {
             writer.beginObject();
             writer.name("blocks");
             writer.beginObject();
+
+            Map<String, BlockSoundGroup> groups = new HashMap<>();
+
             Registry.BLOCK.forEach(block -> {
                 BlockState state = block.getDefaultState();
 
                 try {
+                    var group = block.getDefaultState().getSoundGroup();
+                    if (group != null && group.getStepSound() != null) {
+                        String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", group.volume, group.pitch);
+                        groups.put(group.getStepSound().getId().toString() + "@" + substrate, group);
+                    }
                     if (filter == null || filter.test(state)) {
                         writer.name(Registry.BLOCK.getId(block).toString());
                         writer.beginObject();
                         writer.name("class");
                         writer.value(getClassData(state));
                         writer.name("sound");
-                        writer.value(getSoundData(state));
+                        writer.value(getSoundData(group));
                         writer.name("association");
                         writer.value(PresenceFootsteps.getInstance().getEngine().getIsolator().getBlockMap().getAssociation(state, Lookup.EMPTY_SUBSTRATE));
                         writer.endObject();
@@ -103,18 +113,30 @@ public class BlockReport {
                 }
             });
             writer.endArray();
+            writer.name("primitives");
+            writer.beginObject();
+            groups.values().forEach(group -> {
+                try {
+                    String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", group.volume, group.pitch);
+                    writer.name(group.getStepSound().getId().toString() + "@" + substrate);
+                    writer.value(PresenceFootsteps.getInstance().getEngine().getIsolator().getPrimitiveMap().getAssociation(group, substrate));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            writer.endObject();
             writer.endObject();
         }
     }
 
-    private String getSoundData(BlockState state) {
-        if (state.getSoundGroup() == null) {
+    private String getSoundData(@Nullable BlockSoundGroup group) {
+        if (group == null) {
             return "NULL";
         }
-        if (state.getSoundGroup().getStepSound() == null) {
+        if (group.getStepSound() == null) {
             return "NO_SOUND";
         }
-        return state.getSoundGroup().getStepSound().getId().getPath();
+        return group.getStepSound().getId().getPath();
     }
 
     private String getClassData(BlockState state) {

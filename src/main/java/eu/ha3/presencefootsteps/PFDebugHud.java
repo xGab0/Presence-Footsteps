@@ -1,12 +1,12 @@
 package eu.ha3.presencefootsteps;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import eu.ha3.presencefootsteps.sound.SoundEngine;
 import eu.ha3.presencefootsteps.world.Emitter;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 
@@ -31,6 +31,11 @@ public class PFDebugHud {
 
             renderSoundList("PF Sounds",
                     engine.getIsolator().getBlockMap().getAssociations(state),
+                    list);
+
+            BlockSoundGroup sound = state.getSoundGroup();
+            renderSoundList("PF Prims",
+                    engine.getIsolator().getPrimitiveMap().getAssociations(sound),
                     list);
         }
 
