@@ -82,9 +82,9 @@ class PFOptionsScreen extends GameGui {
                 .setBounds(new Bounds(row, wideLeft, 310, 20));
 
         addButton(new Button(wideLeft, row += 24, 150, 20).onClick(sender -> {
-            sender.getStyle().setText("menu.pf.global." + config.toggleGlobal());
+            sender.getStyle().setText("menu.pf.global." + config.cycleTargetSelector().name().toLowerCase());
         })).getStyle()
-            .setText("menu.pf.global." + config.getEnabledGlobal());
+            .setText("menu.pf.global." + config.getEntitySelector().name().toLowerCase());
 
         addButton(new Button(wideRight, row, 150, 20).onClick(sender -> {
             sender.getStyle().setText("menu.pf.multiplayer." + config.toggleMultiplayer());

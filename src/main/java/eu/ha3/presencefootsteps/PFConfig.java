@@ -2,6 +2,7 @@ package eu.ha3.presencefootsteps;
 
 import java.nio.file.Path;
 
+import eu.ha3.presencefootsteps.config.EntitySelector;
 import eu.ha3.presencefootsteps.config.JsonFile;
 import eu.ha3.presencefootsteps.sound.generator.Locomotion;
 import net.minecraft.util.crash.CrashReportSection;
@@ -21,6 +22,8 @@ public class PFConfig extends JsonFile {
 
     private boolean global = true;
 
+    private EntitySelector targetEntities = EntitySelector.ALL;
+
     private transient final PresenceFootsteps pf;
 
     public PFConfig(Path file, PresenceFootsteps pf) {
@@ -35,11 +38,12 @@ public class PFConfig extends JsonFile {
         return multiplayer;
     }
 
-    public boolean toggleGlobal() {
-        global = !global;
+    public EntitySelector cycleTargetSelector() {
+        targetEntities = EntitySelector.VALUES[(targetEntities.ordinal() + 1) % EntitySelector.VALUES.length];
+
         save();
 
-        return global;
+        return targetEntities;
     }
 
     public Locomotion setLocomotion(Locomotion loco) {
@@ -56,6 +60,10 @@ public class PFConfig extends JsonFile {
 
     public Locomotion getLocomotion() {
         return Locomotion.byName(stance);
+    }
+
+    public EntitySelector getEntitySelector() {
+        return targetEntities;
     }
 
     public boolean getEnabledGlobal() {
