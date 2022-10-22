@@ -4,8 +4,8 @@
 	"menu.pf.multiplayer.true": "Игроки: Все",
 	"menu.pf.multiplayer.false": "Игроки: Только я",
 	"menu.pf.global.all": "Сущности: Все",
-	"menu.pf.global.players_and_hostiles": "Сущности: Игроки + Враги",
 	"menu.pf.global.players_only": "Сущности: Только игроки",
+	"menu.pf.global.players_and_hostiles": "Сущности: Игроки + Враги",
 	"menu.pf.volume.min": "Громкость: ВЫКЛ",
 	"menu.pf.volume": "Громкость: %d%%",
 	"menu.pf.volume.tooltip": "Громкость звуков Presence Footsteps. Поставьте 0, если хотите выключить мод.",
@@ -54,7 +54,7 @@
 	"subtitles.pf.mud_squealk": "Грязь хлюпает",
 	"subtitles.pf.glass_rattles": "Стекло гремит",
 	"subtitles.pf.glass_croak": "Стекло скрипит",
-	"subtitles.pf.chain": "Цепи звенят"
+	"subtitles.pf.chain": "Цепи звенят",
 	"subtitles.pf.stone_crack": "Камень трескается",
-	"subtitles.pf.wax_squeak": "Воск скрипит"
+	"subtitles.pf.wax_squeak": "Воск скрипит",
 }
