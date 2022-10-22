@@ -1,10 +1,11 @@
 {
 	"key.presencefootsteps.settings": "Presence Footsteps",
 	"menu.pf.title": "Presence Footsteps Options",
-	"menu.pf.multiplayer.true": "Players: All",
-	"menu.pf.multiplayer.false": "Players: Only Me",
-	"menu.pf.global.true": "Entities: All",
-	"menu.pf.global.false": "Entities: Only Players",
+	"menu.pf.multiplayer.true": "Single + Multiplayer",
+	"menu.pf.multiplayer.false": "Singleplayer Only",
+	"menu.pf.global.all": "Entities: All",
+	"menu.pf.global.players_and_hostiles": "Entities: Players + Hostiles",
+	"menu.pf.global.players_only": "Entities: Only Players",
 	"menu.pf.volume.min": "Global Volume: OFF",
 	"menu.pf.volume": "Global Volume: %d%%",
 	"menu.pf.volume.tooltip": "The global volume of all presence footsteps sounds. Set to 0 if you wish to disable the mod entirely.",
@@ -16,8 +17,8 @@
 	"menu.pf.volume.running.tooltip": "How much the footsteps' volume can increase when running.\n\nThis value is ADDED to the total volume will scale with your speed, so the faster you go the louder footsteps will get.\n\nIt's recommended to set this to something small first then make adjustments as needed. Higher values will make the effect more pronounced.",
 	"menu.pf.stance": "Stance: %s",
 	"menu.pf.stance.auto": "Auto",
-	"menu.pf.stance.quadruped.tooltip": "Auto will pick an appropriate stance based on Mine Little Pony. If that mod is not installed, behaves identical to Biped",
 	"menu.pf.stance.none": "None",
+	"menu.pf.stance.none.tooltip": "Auto will pick an appropriate stance based on Mine Little Pony. If that mod is not installed, behaves identical to Biped",
 	"menu.pf.stance.quadruped": "Quadrupedal",
 	"menu.pf.stance.quadruped.tooltip": "Quadrupedal emulates a 4-legged walking mode",
 	"menu.pf.stance.biped": "Bipedal",
@@ -54,5 +55,6 @@
 	"subtitles.pf.glass_rattles": "Glass rattles",
 	"subtitles.pf.glass_croak": "Glass groans",
 	"subtitles.pf.chain": "Chain Jingles",
-	"subtitles.pf.stone_crack": "Stone crumbles"
+	"subtitles.pf.stone_crack": "Stone crumbles",
+	"subtitles.pf.wax_squeak": "Wax squeaks"
 }

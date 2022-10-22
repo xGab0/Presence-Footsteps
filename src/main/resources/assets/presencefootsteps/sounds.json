@@ -660,6 +660,19 @@
       "presencefootsteps:squeakywood/squeakywood_wander7"
     ]
   },
+  "pf_presence.waxedsurface.waxedsurface_wander": {
+    "category": "master",
+    "subtitle": "subtitles.pf.wax_squeak",
+    "sounds": [
+      "presencefootsteps:squeakywood/squeakywood_wander1",
+      "presencefootsteps:squeakywood/squeakywood_wander2",
+      "presencefootsteps:squeakywood/squeakywood_wander3",
+      "presencefootsteps:squeakywood/squeakywood_wander4",
+      "presencefootsteps:squeakywood/squeakywood_wander5",
+      "presencefootsteps:squeakywood/squeakywood_wander6",
+      "presencefootsteps:squeakywood/squeakywood_wander7"
+    ]
+  },
   "pf_presence.stone.stone_run": {
     "category": "master",
     "subtitle": "subtitles.block.generic.footsteps",

@@ -90,7 +90,7 @@ public class ImmediateSoundPlayer implements SoundPlayer, StepSoundPlayer {
             super(getSoundId(soundName, entity),
                     entity.getSoundCategory(),
                     volume, pitch, SoundInstance.createRandom(), false, 0,
-                    SoundInstance.AttenuationType.NONE,
+                    SoundInstance.AttenuationType.LINEAR,
                     entity.getX(),
                     entity.getY(),
                     entity.getZ(),

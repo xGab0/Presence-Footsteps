@@ -863,7 +863,7 @@
           "vol_max": 50,
           "pitch_max": 50,
           "delay": 50,
-          "name": "squeakywood.squeakywood_wander"
+          "name": "waxedsurface.waxedsurface_wander"
         }
       ],
       "wander": [
@@ -872,7 +872,7 @@
           "vol_min": 20,
           "vol_max": 50,
           "pitch_max": 50,
-          "name": "squeakywood.squeakywood_wander"
+          "name": "waxedsurface.waxedsurface_wander"
         },
         {
           "type": "delayed",
@@ -880,7 +880,7 @@
           "vol_max": 50,
           "pitch_max": 50,
           "delay": 50,
-          "name": "squeakywood.squeakywood_wander"
+          "name": "waxedsurface.waxedsurface_wander"
         }
       ],
       "land": "@minecraft:block.copper.break",
