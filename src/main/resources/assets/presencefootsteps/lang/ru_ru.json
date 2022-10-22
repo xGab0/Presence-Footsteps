@@ -3,8 +3,9 @@
 	"menu.pf.title": "Presence Footsteps Options",
 	"menu.pf.multiplayer.true": "Игроки: Все",
 	"menu.pf.multiplayer.false": "Игроки: Только я",
-	"menu.pf.global.true": "Сущности: Все",
-	"menu.pf.global.false": "Сущности: Только игроки",
+	"menu.pf.global.all": "Сущности: Все",
+	"menu.pf.global.players_and_hostiles": "Сущности: Игроки + Враги",
+	"menu.pf.global.players_only": "Сущности: Только игроки",
 	"menu.pf.volume.min": "Громкость: ВЫКЛ",
 	"menu.pf.volume": "Громкость: %d%%",
 	"menu.pf.volume.tooltip": "Громкость звуков Presence Footsteps. Поставьте 0, если хотите выключить мод.",
@@ -16,8 +17,8 @@
 	"menu.pf.volume.running.tooltip": "Как сильно громкость шагов будет изменяться при беге.\n\nЭто значение ДОБАВЛЯЕТСЯ к значению вашей скорости, так что чем быстрее вы бежите, тем громче будут ваши шаги.\n\n Рекомендуется сначала установить меньшее значение и после прибавлять по надобности. Большие значения сделают эффект сильнее.",
 	"menu.pf.stance": "Стойка: %s",
 	"menu.pf.stance.auto": "Авто",
-	"menu.pf.stance.quadruped.tooltip": "Автоматический режим выберет самую удачную стойку основываясь на показаниях мода Mine Little Pony. Если мод отсутствует, режим идентичен Двуногому.",
 	"menu.pf.stance.none": "Никакой",
+	"menu.pf.stance.none.tooltip": "Автоматический режим выберет самую удачную стойку основываясь на показаниях мода Mine Little Pony. Если мод отсутствует, режим идентичен Двуногому.",
 	"menu.pf.stance.quadruped": "Четвероногий",
 	"menu.pf.stance.quadruped.tooltip": "Эмуляция звуков ходьбы с 4 ногами",
 	"menu.pf.stance.biped": "Двуногий",
@@ -54,4 +55,6 @@
 	"subtitles.pf.glass_rattles": "Стекло гремит",
 	"subtitles.pf.glass_croak": "Стекло скрипит",
 	"subtitles.pf.chain": "Цепи звенят"
+	"subtitles.pf.stone_crack": "Камень трескается",
+	"subtitles.pf.wax_squeak": "Воск скрипит"
 }
