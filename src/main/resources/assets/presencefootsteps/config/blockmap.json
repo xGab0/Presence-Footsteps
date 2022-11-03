@@ -88,7 +88,7 @@
 	"minecraft:birch_log": "wood",
 	"minecraft:jungle_log": "wood",
 	"minecraft:acacia_log": "wood",
-	"minecraft:dark_oak_log": "woodutility",
+	"minecraft:dark_oak_log": "wood",
 	"minecraft:mangrove_log": "wood",
 
 	"minecraft:stripped_oak_log": "wood,stone",
@@ -96,7 +96,7 @@
 	"minecraft:stripped_birch_log": "wood,stone",
 	"minecraft:stripped_jungle_log": "wood,stone",
 	"minecraft:stripped_acacia_log": "wood,stone",
-	"minecraft:stripped_dark_oak_log": "woodutility,stone",
+	"minecraft:stripped_dark_oak_log": "wood,stone",
 	"minecraft:stripped_mangrove_log": "wood,stone",
 
 	"minecraft:stripped_oak_wood": "wood,stone",
@@ -104,7 +104,7 @@
 	"minecraft:stripped_birch_wood": "wood,stone",
 	"minecraft:stripped_jungle_wood": "wood,stone",
 	"minecraft:stripped_acacia_wood": "wood,stone",
-	"minecraft:stripped_dark_oak_wood": "woodutility,stone",
+	"minecraft:stripped_dark_oak_wood": "wood,stone",
 	"minecraft:stripped_mangrove_wood": "wood,stone",
 
 	"minecraft:oak_wood": "wood",
