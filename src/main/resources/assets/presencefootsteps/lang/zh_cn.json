@@ -3,7 +3,7 @@
 	"menu.pf.title": "脚步声设置",
 	"menu.pf.multiplayer.true": "模式：多人游戏",
 	"menu.pf.multiplayer.false": "模式：单人游戏",
-	"menu.pf.global.all": "实体: 全部",
+	"menu.pf.global.all": "实体：全部",
 	"menu.pf.global.players_and_hostiles": "实体：玩家+敌对",
 	"menu.pf.global.players_only": "实体: 仅玩家",
 	"menu.pf.volume.min": "音量: 关闭",
