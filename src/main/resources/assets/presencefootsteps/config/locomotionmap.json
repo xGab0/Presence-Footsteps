@@ -3,6 +3,7 @@
 	"minecraft:bee": "NONE",
 	"minecraft:blaze": "NONE",
 	"minecraft:cat": "QUADRUPED",
+	"minecraft:camel": "QUADRUPED",
 	"minecraft:cod": "NONE",
 	"minecraft:cave_spider": "NONE",
 	"minecraft:chicken": "BIPED",

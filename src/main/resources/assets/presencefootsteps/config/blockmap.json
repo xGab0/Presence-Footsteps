@@ -232,6 +232,7 @@
 	"minecraft:bricks": "brickstone",
 	"minecraft:tnt": "equipment",
 	"minecraft:bookshelf": "wood",
+	"minecraft:chiseled_bookshelf": "wood",
 	"minecraft:mossy_cobblestone": "stone",
 	"minecraft:obsidian": "obsidian",
 	"minecraft:crying_obsidian": "obsidian",
@@ -437,6 +438,7 @@
 	"minecraft:acacia_fence_gate.bigger": "bluntwood",
 	"minecraft:dark_oak_fence_gate.bigger": "bluntwood",
 	"minecraft:mangrove_fence_gate.bigger": "bluntwood",
+	"minecraft:bamboo_fence_gate.bigger": "bluntwood",
 
 	"minecraft:brick_stairs": "brickstone",
 	"minecraft:stone_brick_stairs": "brickstone",
@@ -838,7 +840,8 @@
 	"minecraft:wheat[age=6].foliage": "straw",
 	"minecraft:wheat[age=7].foliage": "straw",
 
-	"#minecraft:signs": "NOT_EMITTER",
+	"#minecraft:standing_signs": "NOT_EMITTER",
+	"#minecraft:all_hanging_signs": "bluntwood",
 
 	"minecraft:sugar_cane": "NOT_EMITTER",
 	"minecraft:sugar_cane.messy": "MESSY_GROUND",
@@ -852,6 +855,16 @@
 	"minecraft:bamboo_sapling": "NOT_EMITTER",
 	"minecraft:bamboo_sapling.foliage": "squeakywood",
 	"minecraft:cocoa": "organic_dry",
+	
+	"minecraft:bamboo_mosaic": "squeakywood",
+	"minecraft:bamboo_block": "squeakywood",
+	"minecraft:stripped_bamboo_block": "squeakywood",
+	"minecraft:bamboo_planks": "squeakywood",
+	"minecraft:bamboo_button": "squeakywood",
+	"minecraft:bamboo_slab": "squeakywood",
+	"minecraft:bamboo_mosaic_slab": "squeakywood",
+	"minecraft:bamboo_stairs": "squeakywood",
+	"minecraft:bamboo_mosaic_stairs": "squeakywood",
 
 	"#candles": "brickstone",
 	"minecraft:cake": "organic",
@@ -906,6 +919,7 @@
 	"minecraft:skeleton_skull": "bone",
 	"minecraft:wither_skeleton_skull": "bone",
 	"minecraft:player_head": "organic_dry",
+	"minecraft:piglin_head": "organic_dry",
 	"minecraft:zombie_head": "organic",
 	"minecraft:creeper_head": "organic_dry",
 	"minecraft:dragon_head": "organic_dry",
@@ -913,6 +927,7 @@
 	"minecraft:skeleton_wall_skull": "bone",
 	"minecraft:wither_skeleton_wall_skull": "bone",
 	"minecraft:player_wall_head": "organic_dry",
+	"minecraft:piglin_wall_head": "organic_dry",
 	"minecraft:zombie_wall_head": "organic",
 	"minecraft:creeper_wall_head": "organic_dry",
 	"minecraft:dragon_wall_head": "organic_dry",

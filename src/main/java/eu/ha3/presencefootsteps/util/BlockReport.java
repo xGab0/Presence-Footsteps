@@ -37,12 +37,12 @@ import net.minecraft.block.TorchBlock;
 import net.minecraft.block.TransparentBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class BlockReport {
     private final Path loc;
@@ -73,7 +73,7 @@ public class BlockReport {
 
             Map<String, BlockSoundGroup> groups = new HashMap<>();
 
-            Registry.BLOCK.forEach(block -> {
+            Registries.BLOCK.forEach(block -> {
                 BlockState state = block.getDefaultState();
 
                 try {
@@ -83,7 +83,7 @@ public class BlockReport {
                         groups.put(group.getStepSound().getId().toString() + "@" + substrate, group);
                     }
                     if (filter == null || filter.test(state)) {
-                        writer.name(Registry.BLOCK.getId(block).toString());
+                        writer.name(Registries.BLOCK.getId(block).toString());
                         writer.beginObject();
                         writer.name("class");
                         writer.value(getClassData(state));
@@ -100,9 +100,9 @@ public class BlockReport {
             writer.endObject();
             writer.name("unmapped_entities");
             writer.beginArray();
-            Registry.ENTITY_TYPE.forEach(type -> {
+            Registries.ENTITY_TYPE.forEach(type -> {
                 if (type.create(MinecraftClient.getInstance().world) instanceof LivingEntity) {
-                    Identifier id = Registry.ENTITY_TYPE.getId(type);
+                    Identifier id = Registries.ENTITY_TYPE.getId(type);
                     if (!PresenceFootsteps.getInstance().getEngine().getIsolator().getLocomotionMap().contains(id)) {
                         try {
                             writer.value(id.toString());

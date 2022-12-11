@@ -13,9 +13,9 @@ import com.google.common.collect.Lists;
 import eu.ha3.presencefootsteps.PresenceFootsteps;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.property.Property;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.*;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 /**
  * A state lookup that finds an association for a given block state within a specific substrate (or no substrate).
@@ -103,9 +103,9 @@ public class StateLookup implements Lookup<BlockState> {
             }
 
             private Bucket getTile(BlockState state) {
-                return blocks.computeIfAbsent(Registry.BLOCK.getId(state.getBlock()), id -> {
+                return blocks.computeIfAbsent(Registries.BLOCK.getId(state.getBlock()), id -> {
                     for (Identifier tag : tags.keySet()) {
-                        if (state.isIn(TagKey.of(Registry.BLOCK_KEY, tag))) {
+                        if (state.isIn(TagKey.of(RegistryKeys.BLOCK, tag))) {
                             return tags.get(tag);
                         }
                     }
@@ -219,7 +219,7 @@ public class StateLookup implements Lookup<BlockState> {
                     identifier = new Identifier(id);
                 }
 
-                if (!isTag && !Registry.BLOCK.containsId(identifier)) {
+                if (!isTag && !Registries.BLOCK.containsId(identifier)) {
                     PresenceFootsteps.logger.warn("Sound registered for unknown block id " + identifier);
                 }
             } else {

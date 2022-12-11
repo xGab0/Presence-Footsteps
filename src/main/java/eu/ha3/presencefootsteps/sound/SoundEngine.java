@@ -23,6 +23,7 @@ import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -138,24 +139,24 @@ public class SoundEngine implements IdentifiableResourceReloadListener {
         }
     }
 
-    public boolean onSoundRecieved(@Nullable SoundEvent event, SoundCategory category) {
-
+    public boolean onSoundRecieved(@Nullable RegistryEntry<SoundEvent> event, SoundCategory category) {
         if (event == null || category != SoundCategory.PLAYERS || !isRunning(MinecraftClient.getInstance())) {
             return false;
         }
 
-        if (event == SoundEvents.ENTITY_PLAYER_SWIM
-         || event == SoundEvents.ENTITY_PLAYER_SPLASH
-         || event == SoundEvents.ENTITY_PLAYER_BIG_FALL
-         || event == SoundEvents.ENTITY_PLAYER_SMALL_FALL) {
-            return true;
-        }
+        return event.getKeyOrValue().right().filter(sound -> {
+            if (event == SoundEvents.ENTITY_PLAYER_SWIM
+                    || event == SoundEvents.ENTITY_PLAYER_SPLASH
+                    || event == SoundEvents.ENTITY_PLAYER_BIG_FALL
+                    || event == SoundEvents.ENTITY_PLAYER_SMALL_FALL) {
+                       return true;
+                   }
 
-        String[] name = event.getId().getPath().split("\\.");
-
-        return name.length > 0
-                && "block".contentEquals(name[0])
-                && "step".contentEquals(name[name.length - 1]);
+                   String[] name = sound.getId().getPath().split("\\.");
+                   return name.length > 0
+                           && "block".contentEquals(name[0])
+                           && "step".contentEquals(name[name.length - 1]);
+        }).isPresent();
     }
 
     public Locomotion getLocomotion(LivingEntity entity) {

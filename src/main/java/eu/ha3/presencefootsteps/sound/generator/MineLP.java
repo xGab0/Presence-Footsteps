@@ -26,7 +26,7 @@ public class MineLP {
 
         Identifier texture = MinecraftClient.getInstance().getEntityRenderDispatcher().getRenderer(entity).getTexture(entity);
 
-        Race race = MineLittlePony.getInstance().getManager().getPony(texture).getRace(false);
+        Race race = MineLittlePony.getInstance().getManager().getPony(texture).race();
 
         if (race.isHuman()) {
             return fallback;
@@ -36,6 +36,6 @@ public class MineLP {
     }
 
     public static Locomotion getLocomotion(PlayerEntity ply) {
-        return MineLittlePony.getInstance().getManager().getPony(ply).canFly() ? Locomotion.FLYING : Locomotion.QUADRUPED;
+        return MineLittlePony.getInstance().getManager().getPony(ply).race().hasWings() ? Locomotion.FLYING : Locomotion.QUADRUPED;
     }
 }

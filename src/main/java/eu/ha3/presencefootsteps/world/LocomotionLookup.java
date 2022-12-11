@@ -8,8 +8,8 @@ import eu.ha3.presencefootsteps.sound.generator.Locomotion;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class LocomotionLookup implements Index<Entity, Locomotion> {
 
@@ -27,7 +27,7 @@ public class LocomotionLookup implements Index<Entity, Locomotion> {
     public void add(String key, String value) {
         Identifier id = new Identifier(key);
 
-        if (!Registry.ENTITY_TYPE.containsId(id)) {
+        if (!Registries.ENTITY_TYPE.containsId(id)) {
             PresenceFootsteps.logger.warn("Locomotion registered for unknown entity type " + id);
         }
 

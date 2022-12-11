@@ -1,5 +1,5 @@
 {
-	"minecraft:block.honey_block.step": "honey",
+	  "minecraft:block.honey_block.step": "honey",
     "minecraft:block.pointed_dripstone.step": "ore",
     "minecraft:block.spore_blossom.step": "NOT_EMITTER",
     "minecraft:block.anvil.step": "metalcompressed,hardmetal",
@@ -19,6 +19,7 @@
     "minecraft:block.deepslate_bricks.step": "composite,brickstone",
     "minecraft:block.packed_mud.step": "dirt",
     "minecraft:block.wood.step": "wood",
+    "minecraft:block.chiseled_bookshelf.step": "wood",
     "minecraft:block.ladder.step": "ladder",
     "minecraft:block.ancient_debris.step": "hardsteel,stone",
     "minecraft:block.lodestone.step": "stonemachine",
@@ -40,6 +41,7 @@
     "minecraft:block.sculk_catalyst.step": "organic_solid",
     "minecraft:block.sand.step": "sand",
     "minecraft:block.bamboo.step": "squeakywood",
+    "minecraft:block.bamboo_wood.step": "squeakywood",
     "minecraft:block.candle.step": "brickstone",
     "minecraft:block.deepslate.step": "slate",
     "minecraft:block.fungus.step": "mushroom",
@@ -75,5 +77,8 @@
     "minecraft:block.muddy_mangrove_roots.step": "mud,slick",
     "minecraft:block.deepslate_tiles.step": "brickstone",
     "minecraft:block.coral_block.step": "organic",
-    "minecraft:block.polished_deepslate.step": "rough_slate"
+    "minecraft:block.polished_deepslate.step": "rough_slate",
+    "minecraft:block.hanging_sign.step": "bluntwood",
+    "minecraft:block.nether_wood_hanging_sign.step": "bluntwood,mushroom",
+    "minecraft:block.nether_wood.step": "wood,mushroom"
 }
