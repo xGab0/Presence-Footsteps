@@ -33,7 +33,7 @@
     "minecraft:block.soul_soil.step": "souls",
     "minecraft:block.bone_block.step": "bone",
     "minecraft:block.stone.step@1.00_1.50": "hardmetal",
-    "minecraft:block.meta.step@1.00_1.50": "hardmetal",
+    "minecraft:block.metal.step@1.00_1.50": "hardmetal",
     "minecraft:block.stone.step": "brickstone",
     "minecraft:block.tuff.step": "stone",
     "minecraft:block.slime_block.step": "mud,slime",
