@@ -22,7 +22,7 @@
 	"menu.pf.stance.quadruped": "Quadrupedal",
 	"menu.pf.stance.quadruped.tooltip": "Quadrupedal emulates a 4-legged walking mode",
 	"menu.pf.stance.biped": "Bipedal",
-	"menu.pf.stance.biped.tooltip": "Biped emulates a 2-legged (human) walking mode",
+	"menu.pf.stance.biped.tooltip": "Bipedal emulates a 2-legged (human) walking mode",
 	"menu.pf.stance.flying": "Pegasus",
 	"menu.pf.stance.flying.tooltip": "Pegasus emulates a 4-legged walking mode with wings",
 	"menu.pf.stance.flying_biped": "Avian",
