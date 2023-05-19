@@ -267,7 +267,7 @@ public class PFSolver implements Solver {
             return Association.NOT_EMITTER;
         }
 
-        if (Emitter.isResult(association)) {
+        if (Emitter.isResult(association) || Emitter.isResult(wetAssociation)) {
             return new Association(in, pos).withDry(association).withWet(wetAssociation);
         }
 
