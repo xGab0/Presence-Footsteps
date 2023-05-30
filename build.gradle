@@ -10,6 +10,7 @@ plugins {
     id 'com.modrinth.minotaur' version '2.+'
     id 'org.ajoberstar.reckon' version '0.16.1'
 }
+apply plugin: 'dex.plugins.outlet'
 
 java {
     toolchain {
