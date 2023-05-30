@@ -10,8 +10,6 @@ import eu.ha3.presencefootsteps.sound.player.SoundPlayer;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectImmutableList;
 import net.minecraft.entity.LivingEntity;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.List;
@@ -25,17 +23,13 @@ import java.util.List;
  *
  */
 record WeightedAcoustic(
-        @NotNull List<Acoustic> theAcoustics,
+        List<Acoustic> theAcoustics,
         float[] probabilityThresholds
 ) implements Acoustic {
 
-    @Contract(value = "_, _ -> new", pure = true)
-    public static @NotNull WeightedAcoustic of(
-            final @NotNull List<Acoustic> acoustics,
-            final @NotNull List<Integer> weights)
-    {
-        final List<Acoustic> theAcoustics = new ObjectArrayList<>(acoustics);
-        final float[] probabilityThresholds = new float[acoustics.size() - 1];
+    public static WeightedAcoustic of(List<Acoustic> acoustics, List<Integer> weights) {
+        List<Acoustic> theAcoustics = new ObjectArrayList<>(acoustics);
+        float[] probabilityThresholds = new float[acoustics.size() - 1];
 
         float total = 0;
         for (int i = 0; i < weights.size(); i++) {
@@ -53,16 +47,12 @@ record WeightedAcoustic(
         return new WeightedAcoustic(theAcoustics, probabilityThresholds);
     }
 
-    @Contract(value = "_, _ -> new", pure = true)
-    public static @NotNull Acoustic fromJson(
-            final @NotNull JsonObject json,
-            final @NotNull AcousticsJsonParser context)
-    {
-        final List<Integer> weights = new ObjectArrayList<>();
-        final List<Acoustic> acoustics = new ObjectArrayList<>();
+    public static Acoustic fromJson(JsonObject json, AcousticsJsonParser context) {
+        List<Integer> weights = new ObjectArrayList<>();
+        List<Acoustic> acoustics = new ObjectArrayList<>();
 
-        final JsonArray sim = json.getAsJsonArray("array");
-        final Iterator<JsonElement> iter = sim.iterator();
+        JsonArray sim = json.getAsJsonArray("array");
+        Iterator<JsonElement> iter = sim.iterator();
 
         while (iter.hasNext()) {
             JsonElement subElement = iter.next();
@@ -85,7 +75,7 @@ record WeightedAcoustic(
 
     @Override
     public void playSound(SoundPlayer player, LivingEntity location, State event, Options inputOptions) {
-        final float rand = player.getRNG().nextFloat();
+        float rand = player.getRNG().nextFloat();
 
         int marker = 0;
         while (marker < probabilityThresholds.length && probabilityThresholds[marker] < rand) {

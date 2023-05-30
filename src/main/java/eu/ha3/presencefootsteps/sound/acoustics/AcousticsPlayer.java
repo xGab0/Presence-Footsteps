@@ -16,7 +16,6 @@ public record AcousticsPlayer(
         SoundPlayer player,
         Map<String, Acoustic> acoustics
 ) implements AcousticLibrary {
-
     public AcousticsPlayer(SoundPlayer player) {
         this(player, new Object2ObjectOpenHashMap<>());
     }

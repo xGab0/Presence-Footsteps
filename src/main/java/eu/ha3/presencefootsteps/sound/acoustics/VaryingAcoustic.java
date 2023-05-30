@@ -6,9 +6,6 @@ import eu.ha3.presencefootsteps.sound.State;
 import eu.ha3.presencefootsteps.sound.player.SoundPlayer;
 import eu.ha3.presencefootsteps.util.Range;
 import net.minecraft.entity.LivingEntity;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * The simplest form of an acoustic. Plays one sound with a set volume and pitch range.
@@ -21,8 +18,8 @@ record VaryingAcoustic(
         Range pitch
 ) implements Acoustic {
     public static VaryingAcoustic of(String name, AcousticsJsonParser context) {
-        final Range volume = new Range(1);
-        final Range pitch = new Range(1);
+        Range volume = new Range(1);
+        Range pitch = new Range(1);
 
         volume.copy(context.getVolumeRange());
         pitch.copy(context.getPitchRange());
@@ -34,7 +31,7 @@ record VaryingAcoustic(
     }
 
     public static VaryingAcoustic fromJson(JsonObject json, AcousticsJsonParser context) {
-        final VaryingAcoustic acoustic = VaryingAcoustic.of(json.get("name").getAsString(), context);
+        VaryingAcoustic acoustic = VaryingAcoustic.of(json.get("name").getAsString(), context);
 
         acoustic.volume.read("vol", json, context);
         acoustic.pitch.read("pitch", json, context);

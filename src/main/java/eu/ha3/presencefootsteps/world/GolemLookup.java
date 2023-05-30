@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class GolemLookup implements Lookup<EntityType<?>> {
-
     private final Map<String, Map<Identifier, String>> substrates = new Object2ObjectLinkedOpenHashMap<>();
 
     @Override

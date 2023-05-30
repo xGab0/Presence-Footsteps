@@ -17,31 +17,23 @@ import java.util.Map;
  *
  * @author Hurry
  */
-public class AcousticsJsonParser {
+public final class AcousticsJsonParser {
     private static final int ENGINEVERSION = 1;
-    private static final Map<String, AcousticFactory> factories;
-
-    static {
-        final String[] keys = new String[] {
-                "basic",
-                "events",
-                "simultaneous",
-                "delayed",
-                "probability",
-                "chance"
-        };
-
-        final AcousticFactory[] values = new AcousticFactory[] {
-                VaryingAcoustic::fromJson,        // basic
-                EventSelectorAcoustics::fromJson, // events
-                SimultaneousAcoustic::fromJson,   // simultaneous
-                DelayedAcoustic::fromJson,        // delayed
-                WeightedAcoustic::fromJson,       // probability
-                ChanceAcoustic::fromJson          // chance
-        };
-
-        factories = Object2ObjectMaps.unmodifiable(new Object2ObjectOpenHashMap<>(keys, values));
-    }
+    private static final Map<String, AcousticFactory> FACTORIES = Object2ObjectMaps.unmodifiable(new Object2ObjectOpenHashMap<>(new String[] {
+            "basic",
+            "events",
+            "simultaneous",
+            "delayed",
+            "probability",
+            "chance"
+    }, new AcousticFactory[] {
+            VaryingAcoustic::fromJson,        // basic
+            EventSelectorAcoustics::fromJson, // events
+            SimultaneousAcoustic::fromJson,   // simultaneous
+            DelayedAcoustic::fromJson,        // delayed
+            WeightedAcoustic::fromJson,       // probability
+            ChanceAcoustic::fromJson          // chance
+    }));
 
     private final Range defaultVolume = new Range(1);
     private final Range defaultPitch = new Range(1);
@@ -121,11 +113,11 @@ public class AcousticsJsonParser {
 
         String type = unsolved.has("type") ? unsolved.get("type").getAsString() : defaultUnassigned;
 
-        if (!factories.containsKey(type)) {
+        if (!FACTORIES.containsKey(type)) {
             throw new JsonParseException("Invalid type for acoustic `" + type + "`");
         }
 
-        return factories.get(type).create(unsolved, this);
+        return FACTORIES.get(type).create(unsolved, this);
     }
 
     public Range getVolumeRange() {
