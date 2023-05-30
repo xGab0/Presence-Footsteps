@@ -47,7 +47,7 @@ dependencies {
     modImplementation "com.minelittlepony:minelittlepony:${project.minelp_version}"
     modCompileOnly("com.terraformersmc:modmenu:${project.modmenu_version}")
 
-    modImplementation "com.github.Virtuoel:Pehkui:${project.pehkui_version}"
+    // modImplementation "com.github.Virtuoel:Pehkui:${project.pehkui_version}"
 }
 
 processResources {

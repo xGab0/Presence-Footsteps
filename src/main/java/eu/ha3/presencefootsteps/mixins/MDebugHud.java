@@ -9,12 +9,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import eu.ha3.presencefootsteps.PresenceFootsteps;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.DebugHud;
 import net.minecraft.util.hit.HitResult;
 
 @Mixin(DebugHud.class)
-public abstract class MDebugHud extends DrawableHelper {
+public abstract class MDebugHud {
 
     @Shadow
     private HitResult blockHit;

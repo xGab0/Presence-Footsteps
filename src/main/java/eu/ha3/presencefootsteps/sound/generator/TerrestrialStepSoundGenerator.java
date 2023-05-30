@@ -208,7 +208,7 @@ class TerrestrialStepSoundGenerator implements StepSoundGenerator {
 
             acoustics.playAcoustic(ply, "_SWIM", state, options);
 
-            solver.playAssociation(ply, solver.findAssociation(ply.world, ply.getBlockPos().down(), Solver.MESSY_FOLIAGE_STRATEGY), event);
+            solver.playAssociation(ply, solver.findAssociation(ply.getWorld(), ply.getBlockPos().down(), Solver.MESSY_FOLIAGE_STRATEGY), event);
         } else {
             solver.playAssociation(ply, solver.findAssociation(ply, verticalOffsetAsMinus, isRightFoot), event);
             isRightFoot = !isRightFoot;
@@ -290,7 +290,7 @@ class TerrestrialStepSoundGenerator implements StepSoundGenerator {
             return;
         }
 
-        Association assos = solver.findAssociation(ply.world, BlockPos.ofFloored(
+        Association assos = solver.findAssociation(ply.getWorld(), BlockPos.ofFloored(
             ply.getX(),
             ply.getY() - 0.1D - (ply.hasVehicle() ? ply.getHeightOffset() : 0) - (ply.isOnGround() ? 0 : 0.25D),
             ply.getZ()

@@ -37,12 +37,13 @@ public class ImmediateSoundPlayer implements SoundPlayer, StepSoundPlayer {
         return random;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void playStep(Association assos) {
         BlockSoundGroup soundType = assos.getSoundGroup();
 
-        if (!assos.getMaterial().isLiquid() && soundType != null) {
-            BlockState beside = assos.getSource().world.getBlockState(assos.getPos().up());
+        if (!assos.getState().isLiquid() && soundType != null) {
+            BlockState beside = assos.getSource().getWorld().getBlockState(assos.getPos().up());
 
             if (beside.getBlock() == Blocks.SNOW) {
                 soundType = Blocks.SNOW.getSoundGroup(beside);

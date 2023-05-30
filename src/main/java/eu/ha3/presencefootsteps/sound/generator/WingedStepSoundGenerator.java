@@ -66,23 +66,6 @@ class WingedStepSoundGenerator extends TerrestrialStepSoundGenerator {
             case ASCENDING, FLYING -> variator.WING_SPEED_NORMAL;
             default -> variator.WING_SPEED_IDLE;
         };
-        /*
-        switch (state) {
-        case COASTING:
-            if (flapMod == 0)
-                return variator.WING_SPEED_COAST;
-            return variator.WING_SPEED_NORMAL * flapMod;
-        case COASTING_STRAFING:
-            return variator.WING_SPEED_NORMAL * (1 + flapMod);
-        case DASHING:
-            return variator.WING_SPEED_RAPID;
-        case ASCENDING:
-        case FLYING:
-            return variator.WING_SPEED_NORMAL;
-        default:
-            return variator.WING_SPEED_IDLE;
-        }
-        */
     }
 
     @Override
@@ -127,8 +110,8 @@ class WingedStepSoundGenerator extends TerrestrialStepSoundGenerator {
         }
 
         if (!ply.isSubmergedInWater() && !isFalling && now > nextFlapTime) {
-            nextFlapTime = now + getWingSpeed() + (ply.world.random.nextInt(100) - 50);
-            flapMod = (flapMod + 1) % (1 + ply.world.random.nextInt(4));
+            nextFlapTime = now + getWingSpeed() + (ply.getWorld().random.nextInt(100) - 50);
+            flapMod = (flapMod + 1) % (1 + ply.getWorld().random.nextInt(4));
 
             float volume = 1;
             long diffImmobile = now - lastTimeImmobile;
@@ -165,6 +148,7 @@ class WingedStepSoundGenerator extends TerrestrialStepSoundGenerator {
         state = result;
         return changed;
     }
+
     private enum FlightState {
         DASHING,
         COASTING,

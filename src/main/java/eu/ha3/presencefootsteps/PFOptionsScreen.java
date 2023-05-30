@@ -16,8 +16,8 @@ import com.minelittlepony.common.client.gui.element.Slider;
 
 import eu.ha3.mc.quick.update.Versions;
 import eu.ha3.presencefootsteps.util.BlockReport;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 class PFOptionsScreen extends GameGui {
@@ -123,9 +123,9 @@ class PFOptionsScreen extends GameGui {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
-        renderBackground(matrices);
-        super.render(matrices, mouseX, mouseY, partialTicks);
+    public void render(DrawContext context, int mouseX, int mouseY, float partialTicks) {
+        renderBackground(context);
+        super.render(context, mouseX, mouseY, partialTicks);
     }
 
     private void redrawUpdateButton(Button button) {

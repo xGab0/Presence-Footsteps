@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.BlockPos;
@@ -84,8 +83,8 @@ public class Association {
         return source;
     }
 
-    public Material getMaterial() {
-        return blockState.getMaterial();
+    public BlockState getState() {
+        return blockState;
     }
 
     public BlockPos getPos() {

@@ -5,7 +5,6 @@ import eu.ha3.presencefootsteps.sound.Options;
 import eu.ha3.presencefootsteps.sound.State;
 import eu.ha3.presencefootsteps.util.PlayerUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
 import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -103,7 +102,7 @@ public class PFSolver implements Solver {
             collider = collider.expand(0.3, 0.5, 0.3);
         }
 
-        Association worked = findAssociation(player.world, pos, collider);
+        Association worked = findAssociation(player.getWorld(), pos, collider);
 
         // If it didn't work, the player has walked over the air on the border of a block.
         // ------ ------ --> z
@@ -143,9 +142,9 @@ public class PFSolver implements Solver {
         // < maxofX- maxofX+ >
         // Take the maximum border to produce the sound
         if (isXdangMax) { // If we are in the positive border, add 1, else subtract 1
-            worked = findAssociation(player.world, pos.east(xdang > 0 ? 1 : -1), collider);
+            worked = findAssociation(player.getWorld(), pos.east(xdang > 0 ? 1 : -1), collider);
         } else {
-            worked = findAssociation(player.world, pos.south(zdang > 0 ? 1 : -1), collider);
+            worked = findAssociation(player.getWorld(), pos.south(zdang > 0 ? 1 : -1), collider);
         }
 
         // If that didn't work, then maybe the footstep hit in the
@@ -157,10 +156,10 @@ public class PFSolver implements Solver {
 
         // Take the maximum direction and try with the orthogonal direction of it
         if (isXdangMax) {
-            return findAssociation(player.world, pos.south(zdang > 0 ? 1 : -1), collider);
+            return findAssociation(player.getWorld(), pos.south(zdang > 0 ? 1 : -1), collider);
         }
 
-        return findAssociation(player.world, pos.east(xdang > 0 ? 1 : -1), collider);
+        return findAssociation(player.getWorld(), pos.east(xdang > 0 ? 1 : -1), collider);
     }
 
     private String findForGolem(World world, BlockPos pos, String substrate) {
@@ -200,9 +199,8 @@ public class PFSolver implements Solver {
         } else {
             // This condition implies that if the carpet is NOT_EMITTER, solving will
             // CONTINUE with the actual block surface the player is walking on
-            Material mat = in.getMaterial();
-
-            if (mat == Material.AIR || mat == Material.DECORATION) {
+                              // check the height of the block. If it's something very short, like a carpet, also look through it
+            if (in.isAir() || in.getCollisionShape(world, pos).getMax(Axis.Y) < 0.3F) {
                 BlockPos down = pos.down();
                 BlockState below = world.getBlockState(down);
 
