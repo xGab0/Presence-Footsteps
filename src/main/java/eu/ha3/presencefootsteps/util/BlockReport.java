@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
@@ -16,30 +17,12 @@ import com.minelittlepony.common.util.GamePaths;
 
 import eu.ha3.presencefootsteps.PresenceFootsteps;
 import eu.ha3.presencefootsteps.world.Lookup;
-import net.minecraft.block.AbstractPressurePlateBlock;
-import net.minecraft.block.AbstractRailBlock;
-import net.minecraft.block.Block;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.CarpetBlock;
-import net.minecraft.block.ConnectingBlock;
-import net.minecraft.block.FallingBlock;
-import net.minecraft.block.FluidBlock;
-import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.block.InfestedBlock;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.PaneBlock;
-import net.minecraft.block.PlantBlock;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.SnowyBlock;
-import net.minecraft.block.SpreadableBlock;
-import net.minecraft.block.StairsBlock;
-import net.minecraft.block.TallPlantBlock;
-import net.minecraft.block.TorchBlock;
-import net.minecraft.block.TransparentBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
@@ -67,67 +50,46 @@ public class BlockReport {
     private void writeReport(@Nullable Predicate<BlockState> filter) throws IOException {
         Files.createDirectories(loc.getParent());
 
-        try (JsonWriter writer = new JsonWriter(Files.newBufferedWriter(loc))) {
-            writer.setIndent("    ");
-            writer.beginObject();
-            writer.name("blocks");
-            writer.beginObject();
+        try (var writer = JsonObjectWriter.of(new JsonWriter(Files.newBufferedWriter(loc)))) {
+            writer.object(() -> {
+                final Map<String, BlockSoundGroup> groups = new Object2ObjectOpenHashMap<>();
+                writer.object("blocks", () -> {
+                    writer.each(Registries.BLOCK, block -> {
+                        BlockState state = block.getDefaultState();
 
-            Map<String, BlockSoundGroup> groups = new Object2ObjectOpenHashMap<>();
-
-            Registries.BLOCK.forEach(block -> {
-                BlockState state = block.getDefaultState();
-
-                try {
-                    var group = block.getDefaultState().getSoundGroup();
-                    if (group != null && group.getStepSound() != null) {
-                        String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", group.volume, group.pitch);
-                        groups.put(group.getStepSound().getId().toString() + "@" + substrate, group);
-                    }
-                    if (filter == null || filter.test(state)) {
-                        writer.name(Registries.BLOCK.getId(block).toString());
-                        writer.beginObject();
-                        writer.name("class");
-                        writer.value(getClassData(state));
-                        writer.name("sound");
-                        writer.value(getSoundData(group));
-                        writer.name("association");
-                        writer.value(PresenceFootsteps.getInstance().getEngine().getIsolator().getBlockMap().getAssociation(state, Lookup.EMPTY_SUBSTRATE));
-                        writer.endObject();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            writer.endObject();
-            writer.name("unmapped_entities");
-            writer.beginArray();
-            Registries.ENTITY_TYPE.forEach(type -> {
-                if (type.create(MinecraftClient.getInstance().world) instanceof LivingEntity) {
-                    Identifier id = Registries.ENTITY_TYPE.getId(type);
-                    if (!PresenceFootsteps.getInstance().getEngine().getIsolator().getLocomotionMap().contains(id)) {
-                        try {
-                            writer.value(id.toString());
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        var group = block.getDefaultState().getSoundGroup();
+                        if (group != null && group.getStepSound() != null) {
+                            String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", group.volume, group.pitch);
+                            groups.put(group.getStepSound().getId().toString() + "@" + substrate, group);
                         }
-                    }
-                }
+
+                        if (filter == null || filter.test(state)) {
+                            writer.object(Registries.BLOCK.getId(block).toString(), () -> {
+                                writer.field("class", getClassData(state));
+                                writer.field("tags", getTagData(state));
+                                writer.field("sound", getSoundData(group));
+                                writer.field("association", PresenceFootsteps.getInstance().getEngine().getIsolator().getBlockMap().getAssociation(state, Lookup.EMPTY_SUBSTRATE));
+                            });
+                        }
+                    });
+                });
+                writer.array("unmapped_entities", () -> {
+                    writer.each(Registries.ENTITY_TYPE, type -> {
+                        Identifier id = Registries.ENTITY_TYPE.getId(type);
+                        if (!PresenceFootsteps.getInstance().getEngine().getIsolator().getLocomotionMap().contains(id)) {
+                            if (type.create(MinecraftClient.getInstance().world) instanceof LivingEntity) {
+                                writer.writer().value(id.toString());
+                            }
+                        }
+                    });
+                });
+                writer.object("primitives", () -> {
+                    writer.each(groups.values(), group -> {
+                        String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", group.volume, group.pitch);
+                        writer.field(group.getStepSound().getId().toString() + "@" + substrate, PresenceFootsteps.getInstance().getEngine().getIsolator().getPrimitiveMap().getAssociation(group, substrate));
+                    });
+                });
             });
-            writer.endArray();
-            writer.name("primitives");
-            writer.beginObject();
-            groups.values().forEach(group -> {
-                try {
-                    String substrate = String.format(Locale.ENGLISH, "%.2f_%.2f", group.volume, group.pitch);
-                    writer.name(group.getStepSound().getId().toString() + "@" + substrate);
-                    writer.value(PresenceFootsteps.getInstance().getEngine().getIsolator().getPrimitiveMap().getAssociation(group, substrate));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            writer.endObject();
-            writer.endObject();
         }
     }
 
@@ -142,31 +104,16 @@ public class BlockReport {
     }
 
     private String getClassData(BlockState state) {
-        Block block = state.getBlock();
+        @Nullable
+        String canonicalName = state.getBlock().getClass().getCanonicalName();
+        if (canonicalName == null) {
+            return "<anonymous>";
+        }
+        return FabricLoader.getInstance().getMappingResolver().unmapClassName("yarn", canonicalName);
+    }
 
-        String soundName = "";
-
-        if (block instanceof AbstractPressurePlateBlock) soundName += ",EXTENDS_PRESSURE_PLATE";
-        if (block instanceof AbstractRailBlock) soundName += ",EXTENDS_RAIL";
-        if (block instanceof BlockWithEntity) soundName += ",EXTENDS_CONTAINER";
-        if (block instanceof FluidBlock) soundName += ",EXTENDS_LIQUID";
-        if (block instanceof PlantBlock) soundName += ",EXTENDS_PLANT";
-        if (block instanceof TallPlantBlock) soundName += ",EXTENDS_DOUBLE_PLANT";
-        if (block instanceof ConnectingBlock) soundName += ",EXTENDS_CONNECTED_PLANT";
-        if (block instanceof LeavesBlock) soundName += ",EXTENDS_LEAVES";
-        if (block instanceof SlabBlock) soundName += ",EXTENDS_SLAB";
-        if (block instanceof StairsBlock) soundName += ",EXTENDS_STAIRS";
-        if (block instanceof SnowyBlock) soundName += ",EXTENDS_SNOWY";
-        if (block instanceof SpreadableBlock) soundName += ",EXTENDS_SPREADABLE";
-        if (block instanceof FallingBlock) soundName += ",EXTENDS_PHYSICALLY_FALLING";
-        if (block instanceof PaneBlock) soundName += ",EXTENDS_PANE";
-        if (block instanceof HorizontalFacingBlock) soundName += ",EXTENDS_PILLAR";
-        if (block instanceof TorchBlock) soundName += ",EXTENDS_TORCH";
-        if (block instanceof CarpetBlock) soundName += ",EXTENDS_CARPET";
-        if (block instanceof InfestedBlock) soundName += ",EXTENDS_INFESTED";
-        if (block instanceof TransparentBlock) soundName += ",EXTENDS_TRANSPARENT";
-
-        return soundName;
+    private String getTagData(BlockState state) {
+        return Registries.BLOCK.streamTags().filter(state::isIn).map(TagKey::id).map(Identifier::toString).collect(Collectors.joining(","));
     }
 
     private void printResults() {
