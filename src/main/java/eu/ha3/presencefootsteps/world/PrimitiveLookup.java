@@ -7,11 +7,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
-public record PrimitiveLookup(Map<String, Map<Identifier, String>> substrates) implements Lookup<BlockSoundGroup> {
-
-    public PrimitiveLookup() {
-        this(new Object2ObjectLinkedOpenHashMap<>());
-    }
+public class PrimitiveLookup implements Lookup<BlockSoundGroup> {
+    private final Map<String, Map<Identifier, String>> substrates = new Object2ObjectLinkedOpenHashMap<>();
 
     @Override
     public String getAssociation(BlockSoundGroup sounds, String substrate) {
