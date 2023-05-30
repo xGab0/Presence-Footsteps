@@ -11,11 +11,8 @@ import net.minecraft.util.Identifier;
 
 import java.util.Map;
 
-public record LocomotionLookup(Map<Identifier, Locomotion> values) implements Index<Entity, Locomotion> {
-
-    public LocomotionLookup() {
-        this(new Object2ObjectLinkedOpenHashMap<>());
-    }
+public class LocomotionLookup implements Index<Entity, Locomotion> {
+    private final Map<Identifier, Locomotion> values = new Object2ObjectLinkedOpenHashMap<>();
 
     @Override
     public Locomotion lookup(Entity key) {
