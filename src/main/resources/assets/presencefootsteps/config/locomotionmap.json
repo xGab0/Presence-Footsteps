@@ -11,6 +11,7 @@
 	"minecraft:creeper": "QUADRUPED",
 	"minecraft:dolphin": "NONE",
 	"minecraft:donkey": "QUADRUPED",
+	"minecraft:sniffer": "QUADRUPED",
 	"minecraft:drowned": "BIPED",
 	"minecraft:elder_guardian": "NONE",
 	"minecraft:ender_dragon": "NONE",
