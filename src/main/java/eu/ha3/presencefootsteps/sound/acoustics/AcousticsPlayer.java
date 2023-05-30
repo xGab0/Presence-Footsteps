@@ -12,12 +12,13 @@ import net.minecraft.entity.LivingEntity;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public record AcousticsPlayer(
-        SoundPlayer player,
-        Map<String, Acoustic> acoustics
-) implements AcousticLibrary {
+public class AcousticsPlayer implements AcousticLibrary {
+    private final Map<String, Acoustic> acoustics = new Object2ObjectOpenHashMap<>();
+
+    private final SoundPlayer player;
+
     public AcousticsPlayer(SoundPlayer player) {
-        this(player, new Object2ObjectOpenHashMap<>());
+        this.player = player;
     }
 
     @Override

@@ -33,13 +33,13 @@ record VaryingAcoustic(
     public static VaryingAcoustic fromJson(JsonObject json, AcousticsJsonParser context) {
         VaryingAcoustic acoustic = VaryingAcoustic.of(json.get("name").getAsString(), context);
 
-        acoustic.volume.read("vol", json, context);
-        acoustic.pitch.read("pitch", json, context);
+        acoustic.volume().read("vol", json, context);
+        acoustic.pitch().read("pitch", json, context);
 
         return new VaryingAcoustic(
-                acoustic.soundName,
-                acoustic.volume,
-                acoustic.pitch
+                acoustic.soundName(),
+                acoustic.volume(),
+                acoustic.pitch()
         );
     }
 
