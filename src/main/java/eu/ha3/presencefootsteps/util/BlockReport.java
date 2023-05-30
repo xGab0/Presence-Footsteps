@@ -117,12 +117,11 @@ public class BlockReport {
     }
 
     private void printResults() {
-        addMessage(Text.translatable("pf.report.save")
-                .append(Text.literal(loc.getFileName().toString()).styled(s -> s
-                    .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, loc.toString()))
-                    .withFormatting(Formatting.UNDERLINE)))
-                .styled(s -> s
-                    .withColor(Formatting.GREEN)));
+        addMessage(Text.translatable("pf.report.save", Text.literal(loc.getFileName().toString()).styled(s -> s
+                .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, loc.toString()))
+                .withFormatting(Formatting.UNDERLINE)))
+            .styled(s -> s
+                .withColor(Formatting.GREEN)));
     }
 
     public static void addMessage(Text text) {
