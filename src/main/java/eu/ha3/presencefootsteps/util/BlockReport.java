@@ -109,7 +109,7 @@ public class BlockReport {
         if (canonicalName == null) {
             return "<anonymous>";
         }
-        return FabricLoader.getInstance().getMappingResolver().unmapClassName("yarn", canonicalName);
+        return FabricLoader.getInstance().getMappingResolver().unmapClassName("named", canonicalName);
     }
 
     private String getTagData(BlockState state) {

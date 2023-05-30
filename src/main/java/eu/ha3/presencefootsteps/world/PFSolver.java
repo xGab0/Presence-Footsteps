@@ -263,7 +263,7 @@ public class PFSolver implements Solver {
             return Association.NOT_EMITTER;
         }
 
-        if (Emitter.isResult(association) || Emitter.isResult(wetAssociation)) {
+        if (Emitter.isResult(association)) {
             return new Association(in, pos).withDry(association).withWet(wetAssociation);
         }
 
@@ -277,11 +277,11 @@ public class PFSolver implements Solver {
         // Check for primitive in register
         String primitive = isolator.getPrimitiveMap().getAssociation(sounds, substrate);
 
-        if (Emitter.isNonEmitter(primitive)) {
-            return Association.NOT_EMITTER;
+        if (Emitter.isResult(primitive)) {
+            return new Association(in, pos).withDry(primitive).withWet(wetAssociation);
         }
 
-        return new Association(in, pos).withDry(primitive);
+        return Association.NOT_EMITTER;
     }
 
     @Override

@@ -81,10 +81,10 @@ public record StateLookup(Map<String, Bucket> substrates) implements Lookup<Bloc
 
             @Override
             public void add(Key key) {
-                if (key.isWildcard) {
+                if (key.isWildcard()) {
                     wildcards.add(key);
                 } else {
-                    (key.isTag ? tags : blocks).computeIfAbsent(key.identifier, Tile::new).add(key);
+                    (key.isTag() ? tags : blocks).computeIfAbsent(key.identifier(), Tile::new).add(key);
                 }
             }
 
@@ -99,7 +99,7 @@ public record StateLookup(Map<String, Bucket> substrates) implements Lookup<Bloc
 
             @Override
             public boolean contains(BlockState state) {
-                return getTile(state).contains(state);
+                return getTile(state).contains(state) || wildcards.findMatch(state) != Key.NULL;
             }
 
             private Bucket getTile(BlockState state) {
@@ -150,7 +150,7 @@ public record StateLookup(Map<String, Bucket> substrates) implements Lookup<Bloc
         }
 
         private Set<Key> getSetFor(Key key) {
-            return key.empty ? keys : priorityKeys;
+            return key.empty() ? keys : priorityKeys;
         }
 
         public Key findMatch(BlockState state) {
