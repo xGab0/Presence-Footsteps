@@ -10,6 +10,7 @@ import net.minecraft.util.math.MathHelper;
 public class PlayerUtil {
     public static boolean isClientPlayer(Entity entity) {
         PlayerEntity client = MinecraftClient.getInstance().player;
+
         return entity instanceof PlayerEntity
                 && !(entity instanceof OtherClientPlayerEntity)
                 && client != null

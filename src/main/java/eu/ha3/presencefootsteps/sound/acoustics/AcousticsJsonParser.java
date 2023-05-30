@@ -1,15 +1,17 @@
 package eu.ha3.presencefootsteps.sound.acoustics;
 
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-
 import eu.ha3.presencefootsteps.PresenceFootsteps;
 import eu.ha3.presencefootsteps.util.Range;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+
+import java.io.Reader;
+import java.util.Map;
 
 /**
  * A JSON parser that creates a Library of Acoustics.
@@ -17,25 +19,35 @@ import eu.ha3.presencefootsteps.util.Range;
  * @author Hurry
  */
 public class AcousticsJsonParser {
-    private final int ENGINEVERSION = 1;
+    private static final int ENGINEVERSION = 1;
+    private static final Map<String, AcousticFactory> factories;
 
-    private String soundRoot = "";
+    static {
+        final String[] keys = new String[] {
+                "basic",
+                "events",
+                "simultaneous",
+                "delayed",
+                "probability",
+                "chance"
+        };
 
-    private static final Map<String, AcousticFactory> factories = new HashMap<>();
+        final AcousticFactory[] values = new AcousticFactory[] {
+                VaryingAcoustic::fromJson,        // basic
+                EventSelectorAcoustics::fromJson, // events
+                SimultaneousAcoustic::fromJson,   // simultaneous
+                DelayedAcoustic::fromJson,        // delayed
+                WeightedAcoustic::fromJson,       // probability
+                ChanceAcoustic::fromJson          // chance
+        };
+
+        factories = Object2ObjectMaps.unmodifiable(new Object2ObjectOpenHashMap<>(keys, values));
+    }
 
     private final Range defaultVolume = new Range(1);
     private final Range defaultPitch = new Range(1);
-
-    static {
-        factories.put("basic", VaryingAcoustic::new);
-        factories.put("events", EventSelectorAcoustics::new);
-        factories.put("simultaneous", SimultaneousAcoustic::new);
-        factories.put("delayed", DelayedAcoustic::new);
-        factories.put("probability", WeightedAcoustic::fromJson);
-        factories.put("chance", ChanceAcoustic::fromJson);
-    }
-
     private final AcousticLibrary lib;
+    private String soundRoot = "";
 
     public AcousticsJsonParser(AcousticLibrary lib) {
         this.lib = lib;
@@ -94,9 +106,9 @@ public class AcousticsJsonParser {
         if (unsolved.isJsonObject()) {
             ret = solveAcousticsCompound(unsolved.getAsJsonObject(), defaultUnassigned);
         } else if (unsolved.isJsonArray()) {
-            ret = new SimultaneousAcoustic(unsolved.getAsJsonArray(), this);
+            ret = SimultaneousAcoustic.of(unsolved.getAsJsonArray(), this);
         } else if (unsolved.isJsonPrimitive() && unsolved.getAsJsonPrimitive().isString()) {
-            ret = new VaryingAcoustic(unsolved.getAsString(), this);
+            ret = VaryingAcoustic.of(unsolved.getAsString(), this);
         }
 
         if (ret == null) {
