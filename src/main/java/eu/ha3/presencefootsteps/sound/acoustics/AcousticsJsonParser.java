@@ -35,8 +35,8 @@ public final class AcousticsJsonParser {
             ChanceAcoustic::fromJson          // chance
     }));
 
-    private final Range defaultVolume = new Range(1);
-    private final Range defaultPitch = new Range(1);
+    private Range defaultVolume = Range.exactly(1);
+    private Range defaultPitch = Range.exactly(1);
     private final AcousticLibrary lib;
     private String soundRoot = "";
 
@@ -54,8 +54,8 @@ public final class AcousticsJsonParser {
 
     private void doParse(Reader reader) throws JsonParseException {
         soundRoot = "";
-        defaultVolume.on(1);
-        defaultPitch.on(1);
+        defaultVolume = Range.exactly(1);
+        defaultPitch = Range.exactly(1);
 
         JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
 
@@ -78,8 +78,8 @@ public final class AcousticsJsonParser {
 
         if (json.has("defaults")) {
             JsonObject defaults = json.getAsJsonObject("defaults");
-            defaultVolume.read("vol", defaults, this);
-            defaultPitch.read("pitch", defaults, this);
+            defaultVolume = defaultVolume.read("vol", defaults, this);
+            defaultPitch = defaultPitch.read("pitch", defaults, this);
         }
 
         json.getAsJsonObject("contents").entrySet().forEach(element -> {

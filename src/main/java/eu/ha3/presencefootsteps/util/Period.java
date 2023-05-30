@@ -2,34 +2,31 @@ package eu.ha3.presencefootsteps.util;
 
 import java.util.Random;
 
+import com.google.gson.JsonObject;
+
 import eu.ha3.presencefootsteps.sound.Options;
+import net.minecraft.util.JsonHelper;
 
-public class Period implements Options {
+public record Period(long min, long max) implements Options {
+    public static final Period ZERO = new Period(0, 0);
 
-    public long min;
-    public long max;
-
-    public Period(long value) {
-        this(value, value);
+    public static Period of(long value) {
+        return of(value, value);
     }
 
-    public Period(long min, long max) {
-        this.min = min;
-        this.max = max;
+    public static Period of(long min, long max) {
+        return (min == max && max == 0) ? ZERO : new Period(min, max);
     }
 
-    public void copy(Period from) {
-        min = from.min;
-        max = from.max;
-    }
+    public static Period fromJson(JsonObject json, String key) {
+        if (json.has(key)) {
+            return Period.of(json.get(key).getAsLong());
+        }
 
-    public void set(long value) {
-        set(value, value);
-    }
-
-    public void set(long min, long max) {
-        this.min = min;
-        this.max = max;
+        return Period.of(
+                JsonHelper.getLong(json, key + "_min", 0),
+                JsonHelper.getLong(json, key + "_max", 0)
+        );
     }
 
     public float random(Random rand) {

@@ -18,28 +18,18 @@ record VaryingAcoustic(
         Range pitch
 ) implements Acoustic {
     public static VaryingAcoustic of(String name, AcousticsJsonParser context) {
-        Range volume = new Range(1);
-        Range pitch = new Range(1);
-
-        volume.copy(context.getVolumeRange());
-        pitch.copy(context.getPitchRange());
-
         return new VaryingAcoustic(
                 context.getSoundName(name),
-                volume, pitch
+                context.getVolumeRange(),
+                context.getPitchRange()
         );
     }
 
     public static VaryingAcoustic fromJson(JsonObject json, AcousticsJsonParser context) {
-        VaryingAcoustic acoustic = VaryingAcoustic.of(json.get("name").getAsString(), context);
-
-        acoustic.volume().read("vol", json, context);
-        acoustic.pitch().read("pitch", json, context);
-
         return new VaryingAcoustic(
-                acoustic.soundName(),
-                acoustic.volume(),
-                acoustic.pitch()
+                context.getSoundName(json.get("name").getAsString()),
+                context.getVolumeRange().read("vol", json, context),
+                context.getPitchRange().read("pitch", json, context)
         );
     }
 

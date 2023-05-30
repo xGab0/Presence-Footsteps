@@ -7,8 +7,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
-public class PlayerUtil {
-    public static boolean isClientPlayer(Entity entity) {
+public interface PlayerUtil {
+    static boolean isClientPlayer(Entity entity) {
         PlayerEntity client = MinecraftClient.getInstance().player;
 
         return entity instanceof PlayerEntity
@@ -17,7 +17,7 @@ public class PlayerUtil {
                 && (client == entity || client.getUuid().equals(entity.getUuid()));
     }
 
-    public static float getScale(LivingEntity entity) {
+    static float getScale(LivingEntity entity) {
         return MathHelper.clamp(entity.getWidth() / entity.getType().getDimensions().width, 0.01F, 200F);
     }
 }

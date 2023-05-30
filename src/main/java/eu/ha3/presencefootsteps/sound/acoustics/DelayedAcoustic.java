@@ -8,7 +8,6 @@ import eu.ha3.presencefootsteps.sound.player.SoundPlayer;
 import eu.ha3.presencefootsteps.util.Period;
 import eu.ha3.presencefootsteps.util.Range;
 import net.minecraft.entity.LivingEntity;
-import org.jetbrains.annotations.NotNull;
 
 record DelayedAcoustic(
         String soundName,
@@ -16,39 +15,12 @@ record DelayedAcoustic(
         Range pitch,
         Period delay
 ) implements Acoustic {
-
-    public static @NotNull DelayedAcoustic of(String name, AcousticsJsonParser context) {
-        Range volume = new Range(1);
-        Range pitch = new Range(1);
-        Period delay = new Period(0);
-
-        volume.copy(context.getVolumeRange());
-        pitch.copy(context.getPitchRange());
-
-        return new DelayedAcoustic(
-                context.getSoundName(name),
-                volume, pitch, delay
-        );
-    }
-
     public static DelayedAcoustic fromJson(JsonObject json, AcousticsJsonParser context) {
-        DelayedAcoustic acoustic = DelayedAcoustic.of(json.get("name").getAsString(), context);
-        Period delay = new Period(0);
-
-        acoustic.volume.read("vol", json, context);
-        acoustic.pitch.read("pitch", json, context);
-
-        if (json.has("delay")) {
-            delay.set(json.get("delay").getAsLong());
-        } else {
-            delay.set(json.get("delay_min").getAsLong(), json.get("delay_max").getAsLong());
-        }
-
         return new DelayedAcoustic(
-                acoustic.soundName,
-                acoustic.volume,
-                acoustic.pitch,
-                delay
+                context.getSoundName(json.get("name").getAsString()),
+                context.getVolumeRange().read("vol", json, context),
+                context.getPitchRange().read("pitch", json, context),
+                Period.fromJson(json, "delay")
         );
     }
 

@@ -11,7 +11,6 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
 public interface ResourceUtils {
-
     static void forEach(Identifier id, ResourceManager manager, Consumer<Reader> consumer) {
         manager.getAllResources(id).forEach(res -> {
             try (Reader stream = new InputStreamReader(res.getInputStream())) {

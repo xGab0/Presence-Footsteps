@@ -6,26 +6,14 @@ import com.google.gson.JsonObject;
 
 import eu.ha3.presencefootsteps.sound.acoustics.AcousticsJsonParser;
 
-public class Range {
-
-    public float min;
-    public float max;
-
-    public Range(float value) {
-        this(value, value);
+public record Range (float min, float max) {
+    public static Range exactly(float value) {
+        return new Range(value, value);
     }
 
-    public Range(float min, float max) {
-        this.min = min;
-        this.max = max;
-    }
-
-    public void copy(Range from) {
-        min = from.min;
-        max = from.max;
-    }
-
-    public void read(String name, JsonObject json, AcousticsJsonParser context) {
+    public Range read(String name, JsonObject json, AcousticsJsonParser context) {
+        float min = this.min;
+        float max = this.max;
         if (json.has(name + "_min")) {
             min = context.getPercentage(json, name + "_min");
         }
@@ -37,6 +25,8 @@ public class Range {
         if (json.has(name)) {
             min = max = context.getPercentage(json, name);
         }
+
+        return new Range(min, max);
     }
 
     public float random(Random rand) {

@@ -10,8 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.BlockPos;
 
-public class Association {
-
+public final class Association {
     public static final Association NOT_EMITTER = new Association();
 
     private final BlockState blockState;

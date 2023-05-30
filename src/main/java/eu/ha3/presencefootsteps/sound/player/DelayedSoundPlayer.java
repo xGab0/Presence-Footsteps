@@ -77,20 +77,19 @@ class DelayedSoundPlayer implements SoundPlayer {
 
         public boolean tick() {
             switch (nextState(currentTime)) {
-            case PLAYING:
-                immediate.playSound(location, soundName, volume, pitch, Options.EMPTY);
-                return false;
-            case SKIPPING:
-                return true;
-            default:
-                nextPlayTime = timeToPlay;
-                return false;
+                case PLAYING:
+                    immediate.playSound(location, soundName, volume, pitch, Options.EMPTY);
+                    return false;
+                case SKIPPING:
+                    return true;
+                default:
+                    nextPlayTime = timeToPlay;
+                    return false;
             }
         }
 
         private State nextState(long time) {
-            if (time >= timeToPlay || USING_EARLYNESS
-             && time >= timeToPlay - Math.pow(maximum, EARLYNESS_THRESHOLD_POW)) {
+            if (time >= timeToPlay || USING_EARLYNESS && time >= timeToPlay - Math.pow(maximum, EARLYNESS_THRESHOLD_POW)) {
                 if (USING_EARLYNESS && time < timeToPlay) {
                     PresenceFootsteps.logger.debug("Playing early sound (early by " + (timeToPlay - time) + "ms, tolerence is " + Math.pow(maximum, EARLYNESS_THRESHOLD_POW));
                 }
