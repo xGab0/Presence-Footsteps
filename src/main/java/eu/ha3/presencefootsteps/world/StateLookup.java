@@ -8,8 +8,6 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Objects;
@@ -75,8 +73,7 @@ public record StateLookup(Map<String, Bucket> substrates) implements Lookup<Bloc
         record Substrate(
                 KeyList wildcards,
                 Map<Identifier, Bucket> blocks,
-                Map<Identifier, Bucket> tags) implements Bucket
-        {
+                Map<Identifier, Bucket> tags) implements Bucket {
 
             Substrate(String substrate) {
                 this(new KeyList(), new Object2ObjectLinkedOpenHashMap<>(), new Object2ObjectLinkedOpenHashMap<>());
@@ -119,11 +116,6 @@ public record StateLookup(Map<String, Bucket> substrates) implements Lookup<Bloc
         }
 
         record Tile(Map<BlockState, Key> cache, KeyList keys) implements Bucket {
-
-            public Tile() {
-                this(new Object2ObjectLinkedOpenHashMap<>(), new KeyList());
-            }
-
             Tile(Identifier id) {
                 this(new Object2ObjectLinkedOpenHashMap<>(), new KeyList());
             }
@@ -185,11 +177,9 @@ public record StateLookup(Map<String, Bucket> substrates) implements Lookup<Bloc
             boolean isTag,
             boolean isWildcard
     ) {
+        public static final Key NULL = new Key(new Identifier("air"), "", ObjectSets.emptySet(), Emitter.UNASSIGNED, true, false, false);
 
-        public static final Key NULL = new Key();
-
-        @Contract(value = "_, _ -> new", pure = true)
-        public static @NotNull Key of(@NotNull String key, @NotNull String value) {
+        public static Key of(String key, String value) {
             final boolean isTag = key.indexOf('#') == 0;
 
             if (isTag) {
@@ -222,30 +212,18 @@ public record StateLookup(Map<String, Bucket> substrates) implements Lookup<Bloc
                 key = key.replace(substrate, "");
             }
 
-            final Set<Key.Attribute> properties = ObjectArrayList.of(
+            final Set<Attribute> properties = ObjectArrayList.of(
                          key.replace("[", "")
                             .replace("]", "")
                             .split(","))
                     .stream()
                     .filter(line -> line.indexOf('=') > -1)
-                    .map(Key.Attribute::new)
+                    .map(Attribute::new)
                     .collect(ObjectOpenHashSet.toSet());
 
             final boolean empty = properties.isEmpty();
 
             return new Key(identifier, finalSubstrate, properties, value, empty, isTag, isWildcard);
-        }
-
-        private Key() {
-            this(
-                    new Identifier("air"),
-                    "",
-                    ObjectSets.emptySet(),
-                    Emitter.UNASSIGNED,
-                    true,
-                    false,
-                    false
-            );
         }
 
         boolean matches(BlockState state) {
@@ -256,7 +234,7 @@ public record StateLookup(Map<String, Bucket> substrates) implements Lookup<Bloc
             Map<Property<?>, Comparable<?>> entries = state.getEntries();
             Set<Property<?>> keys = entries.keySet();
 
-            for (Key.Attribute property : properties) {
+            for (Attribute property : properties) {
                 for (Property<?> key : keys) {
                     if (key.getName().equals(property.name)) {
                         Comparable<?> value = entries.get(key);
@@ -273,8 +251,9 @@ public record StateLookup(Map<String, Bucket> substrates) implements Lookup<Bloc
 
         @Override
         public String toString() {
-            return (isTag ? "#" : "") + identifier
-                    + "[" + properties.stream().map(Key.Attribute::toString).collect(Collectors.joining()) + "]"
+            return (isTag ? "#" : "")
+                    + identifier
+                    + "[" + properties.stream().map(Attribute::toString).collect(Collectors.joining()) + "]"
                     + "." + substrate
                     + "=" + value;
         }
@@ -296,6 +275,7 @@ public record StateLookup(Map<String, Bucket> substrates) implements Lookup<Bloc
         public boolean equals(Object obj) {
             return this == obj || (obj != null && getClass() == obj.getClass()) && equals((Key) obj);
         }
+
         private boolean equals(Key other) {
             return isTag == other.isTag && isWildcard == other.isWildcard && empty == other.empty
                     && Objects.equals(identifier, other.identifier)
@@ -307,14 +287,15 @@ public record StateLookup(Map<String, Bucket> substrates) implements Lookup<Bloc
             Attribute(String prop) {
                 this(prop.split("="));
             }
+
             Attribute(String[] split) {
                 this(split[0], split[1]);
             }
+
             @Override
             public String toString() {
                 return name + "=" + value;
             }
         }
-
     }
 }

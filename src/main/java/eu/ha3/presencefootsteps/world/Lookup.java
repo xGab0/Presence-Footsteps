@@ -2,14 +2,11 @@ package eu.ha3.presencefootsteps.world;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public interface Lookup<T> extends Loadable {
-
     String EMPTY_SUBSTRATE = "";
     String CARPET_SUBSTRATE = "carpet";
     String WET_SUBSTRATE = "wet";
