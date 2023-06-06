@@ -8,7 +8,7 @@ plugins {
     id 'fabric-loom' version '1.1-SNAPSHOT'
     id 'maven-publish'
     id 'com.modrinth.minotaur' version '2.+'
-    id 'org.ajoberstar.reckon' version '0.16.1'
+    id 'org.ajoberstar.reckon' version '0.13.0'
 }
 apply plugin: 'dex.plugins.outlet'
 
@@ -31,7 +31,8 @@ loom {
 }
 
 reckon {
-    stages('beta', 'rc', 'final')
+    scopeFromProp()
+    stageFromProp('beta', 'rc', 'final')
 }
 
 repositories {
