@@ -12,13 +12,13 @@ import net.minecraft.entity.LivingEntity;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class AcousticsPlayer implements AcousticLibrary {
-    private final Map<String, Acoustic> acoustics = new Object2ObjectOpenHashMap<>();
-
-    private final SoundPlayer player;
+public record AcousticsPlayer(
+        SoundPlayer player,
+        Map<String, Acoustic> acoustics
+) implements AcousticLibrary {
 
     public AcousticsPlayer(SoundPlayer player) {
-        this.player = player;
+        this(player, new Object2ObjectOpenHashMap<>());
     }
 
     @Override
@@ -44,4 +44,15 @@ public class AcousticsPlayer implements AcousticLibrary {
             acoustics.get(acousticName).playSound(player, location, event, inputOptions);
         }
     }
+
+    @Override
+    public SoundPlayer player() {
+        throw new IllegalStateException("internals are not intended to be accessed by design");
+    }
+
+    @Override
+    public Map<String, Acoustic> acoustics() {
+        throw new IllegalStateException("internals are not intended to be accessed by design");
+    }
+
 }

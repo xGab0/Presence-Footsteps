@@ -29,11 +29,10 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-public class BlockReport {
-    private final Path loc;
+public record BlockReport(Path loc) {
 
     public BlockReport(String baseName) {
-        loc = getUniqueFileName(GamePaths.getGameDirectory().resolve("presencefootsteps"), baseName, ".json");
+        this(getUniqueFileName(GamePaths.getGameDirectory().resolve("presencefootsteps"), baseName, ".json"));
     }
 
     public CompletableFuture<?> execute(@Nullable Predicate<BlockState> filter) {

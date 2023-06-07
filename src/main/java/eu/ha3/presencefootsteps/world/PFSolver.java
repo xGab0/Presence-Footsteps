@@ -24,16 +24,11 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Locale;
 
-public class PFSolver implements Solver {
+public record PFSolver(Isolator isolator) implements Solver {
+
     private static final Logger logger = LogManager.getLogger("PFSolver");
 
     private static final double TRAP_DOOR_OFFSET = 0.1;
-
-    private final Isolator isolator;
-
-    public PFSolver(Isolator isolator) {
-        this.isolator = isolator;
-    }
 
     @Override
     public void playAssociation(LivingEntity ply, Association assos, State eventType) {

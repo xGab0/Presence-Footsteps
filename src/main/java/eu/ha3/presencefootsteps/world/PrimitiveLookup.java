@@ -7,8 +7,11 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
-public class PrimitiveLookup implements Lookup<BlockSoundGroup> {
-    private final Map<String, Map<Identifier, String>> substrates = new Object2ObjectLinkedOpenHashMap<>();
+public record PrimitiveLookup(Map<String, Map<Identifier, String>> substrates) implements Lookup<BlockSoundGroup> {
+
+    public PrimitiveLookup() {
+        this(new Object2ObjectLinkedOpenHashMap<>());
+    }
 
     @Override
     public String getAssociation(BlockSoundGroup sounds, String substrate) {
@@ -59,4 +62,10 @@ public class PrimitiveLookup implements Lookup<BlockSoundGroup> {
         }
         return false;
     }
+
+    @Override
+    public Map<String, Map<Identifier, String>> substrates() {
+        throw new IllegalStateException("internals are not intended to be accessed by design");
+    }
+
 }

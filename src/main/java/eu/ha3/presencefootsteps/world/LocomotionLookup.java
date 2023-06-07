@@ -11,15 +11,17 @@ import net.minecraft.util.Identifier;
 
 import java.util.Map;
 
-public class LocomotionLookup implements Index<Entity, Locomotion> {
-    private final Map<Identifier, Locomotion> values = new Object2ObjectLinkedOpenHashMap<>();
+public record LocomotionLookup(Map<Identifier, Locomotion> values) implements Index<Entity, Locomotion> {
+
+    public LocomotionLookup() {
+        this(new Object2ObjectLinkedOpenHashMap<>());
+    }
 
     @Override
     public Locomotion lookup(Entity key) {
-        if (key instanceof PlayerEntity) {
-            return Locomotion.forPlayer((PlayerEntity)key, Locomotion.NONE);
-        }
-        return Locomotion.forLiving(key, values.getOrDefault(EntityType.getId(key.getType()), Locomotion.BIPED));
+        return key instanceof PlayerEntity playerKey
+                ? Locomotion.forPlayer(playerKey, Locomotion.NONE)
+                : Locomotion.forLiving(key, values.getOrDefault(EntityType.getId(key.getType()), Locomotion.BIPED));
     }
 
     @Override
@@ -37,4 +39,10 @@ public class LocomotionLookup implements Index<Entity, Locomotion> {
     public boolean contains(Identifier key) {
         return values.containsKey(key);
     }
+
+    @Override
+    public Map<Identifier, Locomotion> values() {
+        throw new IllegalStateException("internals are not intended to be accessed by design");
+    }
+
 }
